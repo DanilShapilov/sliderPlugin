@@ -10,6 +10,12 @@ First install dependencies:
 npm install
 ```
 
+Run webpack dev server:
+
+```sh
+npm run dev
+```
+
 To create a production build:
 
 ```sh
