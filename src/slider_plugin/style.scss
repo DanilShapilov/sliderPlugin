@@ -1,0 +1,61 @@
+$height: 6px;
+$control-size: 22px;
+$info-width: 30px;
+$info-height: $info-width - 10px;
+$arrow-size: 3px;
+
+.slider {
+  position: relative;
+  background-color: #ccc;
+  width: 100%;
+  margin: 60px 0;
+  height: $height;
+  border-radius: $height;
+  cursor: pointer;
+
+  &__control {
+    position: absolute;
+    top: -($control-size - $height) / 2;
+    width: $control-size;
+    height: $control-size;
+    border-radius: 50%;
+    background-color: red;
+
+    // &:hover{
+    //   .slider__control-info{
+    //     display: flex;
+    //   }
+    // }
+  }
+
+  &__control-info{
+    position: absolute;
+    top: -($control-size + $info-height / 2) + $arrow-size;
+    left: (($control-size / 2) + ($info-width / 2)) - $info-width;
+    background-color: red;
+    width: $info-width;
+    height: $info-height;
+    border-radius: 5px;
+
+    color: #fff;
+    font-size: 12px;
+    // display: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      box-sizing: border-box;
+      top: $info-height;
+      left: ($info-width / 2) - $arrow-size;
+      width: 0; 
+      height: 0; 
+      border-left: $arrow-size solid transparent;
+      border-right: $arrow-size solid transparent;
+      border-top: $arrow-size solid #f00;
+    }
+  }
+
+}
