@@ -1,8 +1,9 @@
 import './index.scss';
-import './slider_plugin/init'
+import './slider_plugin/SliderPlugin'
 
 // @ts-ignore
-window.sl1 = $(".sliderPlugin1").sliderPlugin()
+window.sl1 = $(".sliderPlugin1").sliderPlugin({
+    from: 0,
+    to: 100
+})
 
-// @ts-ignore
-console.log($(window.sl1));
