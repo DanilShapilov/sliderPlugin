@@ -9,7 +9,7 @@
         "moduleResolution": "node",
         "target": "es5",
         "allowJs": true,
-        "noEmitOnError": true
+        // "noEmitOnError": true
         /* Additional Checks */
         // "noUnusedLocals": true,                /* Report errors on unused locals. */
         // "noUnusedParameters": true,            /* Report errors on unused parameters. */

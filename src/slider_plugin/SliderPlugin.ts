@@ -1,38 +1,55 @@
+import { SliderPresenter } from './SliderPresenter'
 import { SliderView } from './SliderView'
 import './style.scss'
 import './interface'
+import { SliderModel } from './SliderModel';
 
 // @ts-ignore
 window.slider = {};
 
+
 (function($)  {
-	$.fn.sliderPlugin = function(options: object):JQuery {
+  $.fn.sliderPlugin = function(options: object):JQuery {
+
+    // default configuration
+    var config: PluginConfig = $.extend({}, {
+      from: 0,
+      to: 100,
+      step: 1,
+      current: 0
+    }, options);
   
-    const view = new SliderView();
-    //@ts-ignore
-    window.slider['view'] = view
+    const view = new SliderView(this, config);
+    const presenter = new SliderPresenter();
+    const model = new SliderModel();
+
+    // @ts-ignore
+    window.slider = {
+      view,
+      presenter,
+      model
+    }
     
-		// default configuration
-		var config = $.extend({}, {
-			opt1: null
-		}, options);
-	
-		// main function
-		function DoSomething($el: JQuery) {
-            $($el).html(view.render())
-        }
-        console.log('Из слайдера',this);
+    
+  
+    // main function
+    // function DoSomething($el: JQuery) {
+    //     $($el).html(view.toHTML())
+    // }
     
 
-		// initialize every element
-		this.each(function() {
-			DoSomething($(this));
-		});
+    // initialize every element
+    this.each(function() {
+      // DoSomething($(this));
+      view.init()
+    });
 
-		return this;
+    return this;
   };
   
   $(function () {
-    $(".sliderPlugin").sliderPlugin();
+    if ($(".sliderPlugin").length) {
+      $(".sliderPlugin").sliderPlugin();
+    }
   })
 })(jQuery);

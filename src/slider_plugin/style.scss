@@ -5,6 +5,11 @@ $info-height: $info-width - 10px;
 $arrow-size: 3px;
 
 .slider {
+  box-sizing: border-box;
+  & *{
+    box-sizing: border-box;
+  }
+
   position: relative;
   background-color: #ccc;
   width: 100%;
