@@ -1,23 +1,29 @@
 import { SliderPresenter } from './SliderPresenter'
 import { SliderView } from './SliderView'
 import './style.scss'
-import './interface'
+import './interfaces'
 import { SliderModel } from './SliderModel';
+import { generateRangeArr } from './helpers';
 
 // @ts-ignore
 window.slider = {};
 
+const defaultConfig: PluginConfig = {
+  range: [0, 100],
+  step: 1,
+  current: 0
+};
+
 
 (function($)  {
-  $.fn.sliderPlugin = function(options: object):JQuery {
+  $.fn.sliderPlugin = function(options: PluginConfig = defaultConfig):JQuery {   
 
+    options = {
+      ...options,
+      range: options.range !== undefined ? generateRangeArr(options.range) : defaultConfig.range
+    }
     // default configuration
-    var config: PluginConfig = $.extend({}, {
-      from: 0,
-      to: 100,
-      step: 1,
-      current: 0
-    }, options);
+    let config: PluginConfig = $.extend({}, defaultConfig, options);
   
     const view = new SliderView(this, config);
     const presenter = new SliderPresenter();
@@ -30,8 +36,6 @@ window.slider = {};
       model
     }
     
-    
-  
     // main function
     // function DoSomething($el: JQuery) {
     //     $($el).html(view.toHTML())

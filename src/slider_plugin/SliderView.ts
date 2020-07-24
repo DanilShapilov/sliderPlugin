@@ -1,17 +1,3 @@
-interface View {
-  attach(observer: Observer): void;
-
-  // Отсоединяет наблюдателя от издателя.
-  detach(observer: Observer): void;
-
-  // Уведомляет всех наблюдателей о событии.
-  notify(): void;
-}
-interface Observer {
-  // Получить обновление от субъекта.
-  update(subject: View): void;
-}
-
 export class SliderView implements View {
   private state: PluginConfig
   private observers: Observer[] = [];
@@ -20,7 +6,7 @@ export class SliderView implements View {
   private $sliderControl!: JQuery
   private $sliderControlInfo!: JQuery
 
-  private allowedLeftForControl!: object;
+  private allowedLeftForControl!: AllowedLeftObj;
   constructor($root:JQuery, config: PluginConfig) {
     this.state = {...config}
     
@@ -35,7 +21,7 @@ export class SliderView implements View {
 
     this.eventHandler = this.eventHandler.bind(this)
     this.mousemoveHandler = this.mousemoveHandler.bind(this)
-    this.mouseupHandler = this.mouseupHandler.bind(this)
+    this.destroyEvents = this.destroyEvents.bind(this)
     
 
 
@@ -43,38 +29,43 @@ export class SliderView implements View {
   }
   
   eventHandler(e: JQueryEventObject) {
-    console.log('mousedown', e);
-
     this.allowedLeftForControl = {
-      minLeft: this.$root.offset()?.left,
-      maxLeft: this.$root.offset()?.left! + this.$root.width()!
+      minLeft: 0,
+      maxLeft: this.$root.width()! - this.$sliderControl.width()!
     }
-    this.changeControlPos(e.offsetX)
-    console.log(e);
     
+    this.changeControlPos(this.calculatePosForControl(e))    
     
-    $('body').on('mousemove', this.mousemoveHandler)
-    $('body').on('mouseup', this.mouseupHandler)
+    $('html').on('mousemove', this.mousemoveHandler)
+    $('html').on('mouseup', this.destroyEvents)
   }
 
-  mousemoveHandler(e: Event) {
-    // console.log('root',this.$root.width());
-    // console.log('sliderControl',this.$sliderControl.offset());
-    
+  mousemoveHandler(e: JQueryEventObject) {
+    this.changeControlPos(this.calculatePosForControl(e))
   }
 
-  mouseupHandler(e: Event) {
-    console.log('mouseupHandler');
-    
-    $('body').off('mousemove')
-    $('body').off('mouseup')
+  destroyEvents(e: Event) {
+    $('html').off('mousemove')
+    $('html').off('mouseup')
+  }
+
+  calculatePosForControl(evt: JQueryEventObject) {
+    const $rootOffset = this.$root.offset();
+    return evt.pageX - $rootOffset?.left!
+    //DEBUG
+    // console.log('offset', this.$root.offset());
+    // console.log('pos', this.$root.position());
   }
 
   changeControlPos(left: number) {
-    // if (left >= this.allowedLeftForControl.maxLeft) {
-      
-    // }
-    $(this.$sliderControl).css('left', left)
+    left -= this.$sliderControl.width()! / 2
+    if (left >= this.allowedLeftForControl.maxLeft) {
+      $(this.$sliderControl).css('left', this.allowedLeftForControl.maxLeft)
+    }else if (left <= this.allowedLeftForControl.minLeft) {
+      $(this.$sliderControl).css('left', this.allowedLeftForControl.minLeft)
+    } else {
+      $(this.$sliderControl).css('left', left)
+    }
   }
 
   toHTML() {
