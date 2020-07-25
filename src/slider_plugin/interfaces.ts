@@ -4,9 +4,12 @@ interface JQuery {
 
 interface PluginConfig {
   range: number[] | string[]
+  rangeOfPixels?: number[];
   step: number
   current: number
+  snapping: boolean
 }
+
 
 interface View {
   attach(observer: Observer): void;
@@ -25,3 +28,4 @@ interface AllowedLeftObj {
   minLeft: number,
   maxLeft: number
 }
+
