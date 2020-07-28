@@ -12,42 +12,36 @@ const defaultConfig: PluginConfig = {
   range: [0, 100],
   step: 1,
   current: 0,
-  snapping: false
+  snapping: false,
+  class: ''
 };
 
 
 (function($)  {
   $.fn.sliderPlugin = function(options: PluginConfig = defaultConfig):JQuery {   
-
-    options = {
-      ...options,
-      step: options.step ?? defaultConfig.step,
-      range: options.range !== undefined ? generateRangeArr(options.range, options.step ?? defaultConfig.step) : generateRangeArr(defaultConfig.range, options.step ?? defaultConfig.step)
-    }
-    
     // default configuration
     let config: PluginConfig = $.extend({}, defaultConfig, options);
 
-    // проверка шага
-    if ( (config.step % 1) !== 0 || typeof config.step !== 'number') {
-      throw new Error(`
-      SliderPlugin: step should be type of number, and  an integer
-        The element is:
-          class: ${this[0].className}
-          id:${this[0].id}
-      `);
-    }
+    // // проверка шага
+    // if ( (config.step % 1) !== 0 || typeof config.step !== 'number') {
+    //   throw new Error(`
+    //   SliderPlugin: step should be type of number, and  an integer
+    //     The element is:
+    //       class: ${this[0].className}
+    //       id:${this[0].id}
+    //   `);
+    // }
 
-    // проверка куррента(индекс)
-    if (config.current > config.range.length - 1 || config.current < 0) {
-      throw new Error(`
-      SliderPlugin: your current option:'${config.current}' not exists in range array,
-       your range array has ${config.range.length} elements, so the last index is ${config.range.length - 1}
-       The element is:
-        class: ${this[0].className}
-        id:${this[0].id}
-       `);
-    }
+    // // проверка куррента(индекс)
+    // if (config.current > config.range.length - 1 || config.current < 0) {
+    //   throw new Error(`
+    //   SliderPlugin: your current option:'${config.current}' not exists in range array,
+    //    your range array has ${config.range.length} elements, so the last index is ${config.range.length - 1}
+    //    The element is:
+    //     class: ${this[0].className}
+    //     id:${this[0].id}
+    //    `);
+    // }
     
     // main function
     // function DoSomething($el: JQuery) {
@@ -57,9 +51,13 @@ const defaultConfig: PluginConfig = {
 
     // initialize every element
     this.each(function() {
-      const view = new SliderView($(this), config);
-      const presenter = new SliderPresenter();
-      const model = new SliderModel();
+      const stateForView = {
+        class: config.class, 
+        snapping: config.snapping
+      }
+      const view = new SliderView($(this), stateForView);
+      const model = new SliderModel(config);
+      const presenter = new SliderPresenter(model, view);
   
       // @ts-ignore
       window.sliders.push({
@@ -67,11 +65,6 @@ const defaultConfig: PluginConfig = {
         presenter,
         model
       })
-      
-
-
-      // DoSomething($(this));
-      view.init()
     });
 
     return this;

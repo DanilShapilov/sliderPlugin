@@ -8,24 +8,20 @@ interface PluginConfig {
   step: number
   current: number
   snapping: boolean
+  class: string
 }
 
-
-interface View {
-  attach(observer: Observer): void;
-
-  // Отсоединяет наблюдателя от издателя.
-  detach(observer: Observer): void;
-
-  // Уведомляет всех наблюдателей о событии.
-  notify(): void;
+interface IViewState {
+  class: string
 }
-interface Observer {
-  // Получить обновление от субъекта.
-  update(subject: View): void;
+
+interface ISliderView {
+
 }
-interface AllowedLeftObj {
-  minLeft: number,
-  maxLeft: number
+
+interface ISliderModel {
+  readonly isSnapping: boolean
+  readonly pixelOfCurrent: number
 }
+
 

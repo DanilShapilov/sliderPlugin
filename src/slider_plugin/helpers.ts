@@ -45,3 +45,7 @@ function ckeckTypeForRange(range: number[] | string[]) {
     }
     return false
 }
+
+export function deepCopy(obj: object) {
+    return JSON.parse(JSON.stringify(obj))
+}
