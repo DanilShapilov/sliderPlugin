@@ -5,7 +5,8 @@ import './slider_plugin/SliderPlugin'
 
 $(".sliderPlugin1").sliderPlugin({
     range: [-100, 100],
-    current: 50,
+    current: 6,
+    step: 10,
     snapping: true
 })
 
@@ -21,12 +22,12 @@ $(".sliderPlugin3").sliderPlugin({
 
 $(".sliderPlugin4").sliderPlugin({
     range: [1, 2, 3, 4, 5, 6],
-    current: 3,
+    step: 2,
     snapping: true
 })
 
 $(".sliderPlugin5").sliderPlugin({
     range: [1, 2, 3, 4, 5, 6],
     current: 0,
-    // step: 2
+    step: 2
 })

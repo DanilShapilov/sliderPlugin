@@ -59,16 +59,6 @@ export class SliderView implements View {
     this.updateValueInControlInfo()
   }
 
-  handleStep(e: JQueryEventObject) {
-    // ПРОЩЕ ПОМЕНЯТЬ ВХОДЯЩИЙ МАССИВ
-    if ( this.state.step > 1 && (this.state.current % this.state.step) === 0) {
-      // this.state.current = prevCurrent;
-      e = {...e, pageX: this.state.rangeOfPixels![this.state.current]}
-      this.changePosUpdateStateCurrent(e)
-      return;
-    }
-  }
-
   updateValueInControlInfo() {
     $(this.$sliderControlInfo).text(this.state.range[this.state.current])
   }
@@ -102,8 +92,6 @@ export class SliderView implements View {
   mouseUp(e: JQueryEventObject) {
     $('html').off('mousemove')
     $('html').off('mouseup')
-
-    this.handleStep(e)
   }
 
   calculatePosForControl(evt: JQueryEventObject) {

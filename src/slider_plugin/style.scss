@@ -42,6 +42,8 @@ $arrow-size: 3px;
     height: $info-height;
     border-radius: 5px;
 
+    user-select: none;
+
     color: #fff;
     font-size: 12px;
     // display: none;

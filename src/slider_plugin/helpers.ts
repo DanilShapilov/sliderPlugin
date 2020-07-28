@@ -1,14 +1,15 @@
-export function generateRangeArr(range: number[] | string[]):string[] {
+export function generateRangeArr(range: number[] | string[], step: number):string[] {
     if (range.length === 2 && ckeckTypeForRange(range)) {
         (range as Array<number | string>) = rangeGenerator(range[0], range[1])
     } else if (range.length === 2 && !ckeckTypeForRange(range)) {
         throw new Error('SliderPlugin: Elements of range should have same type: string or number')
     }
 
-    const rangeToString = (range as Array<number | string>).map( (el):string => {
-        return String(el)
-    })
-    
+    const rangeToString: string[] = 
+    (range as Array<number | string>)
+        .filter( (_el, index) => (index % step) === 0)
+        .map( el => String(el))
+        
     return rangeToString
 }
 

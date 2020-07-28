@@ -21,10 +21,22 @@ const defaultConfig: PluginConfig = {
 
     options = {
       ...options,
-      range: options.range !== undefined ? generateRangeArr(options.range) : generateRangeArr(defaultConfig.range)
+      step: options.step ?? defaultConfig.step,
+      range: options.range !== undefined ? generateRangeArr(options.range, options.step ?? defaultConfig.step) : generateRangeArr(defaultConfig.range, options.step ?? defaultConfig.step)
     }
+    
     // default configuration
     let config: PluginConfig = $.extend({}, defaultConfig, options);
+
+    // проверка шага
+    if ( (config.step % 1) !== 0 || typeof config.step !== 'number') {
+      throw new Error(`
+      SliderPlugin: step should be type of number, and  an integer
+        The element is:
+          class: ${this[0].className}
+          id:${this[0].id}
+      `);
+    }
 
     // проверка куррента(индекс)
     if (config.current > config.range.length - 1 || config.current < 0) {
