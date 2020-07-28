@@ -1,3 +1,4 @@
+import {boundMethod} from 'autobind-decorator'
 export class SliderView implements View {
   private state: PluginConfig
   private observers: Observer[] = [];
@@ -26,13 +27,10 @@ export class SliderView implements View {
     this.updateValueInControlInfo()
     this.changeControlPos(this.state.rangeOfPixels![this.state.current])
 
-    this.eventHandler = this.eventHandler.bind(this)
-    this.mousemoveHandler = this.mousemoveHandler.bind(this)
-    this.mouseUp = this.mouseUp.bind(this)
-
     $(this.$root).on('mousedown', this.eventHandler.bind(this))
   }
 
+  @boundMethod
   eventHandler(e: JQueryEventObject) {
     this.changePosUpdateStateCurrent(e)    
 
@@ -40,15 +38,14 @@ export class SliderView implements View {
     $('html').on('mouseup', this.mouseUp)
   }
 
+  @boundMethod
   mousemoveHandler(e: JQueryEventObject) {    
     this.changePosUpdateStateCurrent(e)
   }
 
   changePosUpdateStateCurrent(e: JQueryEventObject) {
     const selectedPixel: number = this.calculatePosForControl(e)
-    this.updateStateCurrent(selectedPixel)
-    // step logic
-    
+    this.updateStateCurrent(selectedPixel)    
 
     if (this.state.snapping) {
       this.changeControlPos(this.state.rangeOfPixels![this.state.current])
