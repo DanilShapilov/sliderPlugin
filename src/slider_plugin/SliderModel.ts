@@ -13,25 +13,41 @@ export class SliderModel implements ISliderModel {
     this.generateRangeOfPixels(sliderWidth)
   }
   
-  get isSnapping() {
-    return this.state.snapping
+  public pixelOfCurrent(index: number) {
+    return this.state.rangeOfPixels![this.state.current[index]]
   }
 
-  get pixelOfCurrent() {
-    return this.state.rangeOfPixels![this.state.current]
+  currentValue(index:number) {
+    return this.state.range[this.state.current[index]] as string
   }
 
-  get currentValue() {
-    return this.state.range[this.state.current] as string
+  get currentArr() {
+    return this.state.current
   }
 
-  public updateStateCurrent(selectedPixel: number) {
+  get selectedValues(){
+    if (!this.state.selectRange) {
+      return this.currentValue(0)
+    }
+      let i: number = this.state.current[0];
+      let j: number = this.state.current[1];
+      if (i > j) {
+        [i, j] = [j, i]
+      }
+      const selectedRange:string[] = []
+      for (; i <= j; i++) {
+        selectedRange.push(this.state.range[i] as string)
+      }
+      return selectedRange as string[]
+  }
+
+  public updateStateCurrent(index:number, selectedPixel: number) {
     const closest:number = this.state.rangeOfPixels!.reduce((a:number, b:number, i:number) => {
       return Math.abs(b - selectedPixel) < Math.abs(a - selectedPixel) ? b : a;
     });
 
     const closestIndex = this.state.rangeOfPixels?.indexOf(closest) as number
-    this.state.current = closestIndex
+    this.state.current[index] = closestIndex
   }
 
   generateRangeOfPixels(sliderWidth: number) {

@@ -13,16 +13,27 @@ export class SliderPresenter {
   }
 
   initEvents() {
-    $(this.view).on("view:selectChanged", (_e, selectedPixel) =>{
-      this.model.updateStateCurrent(selectedPixel)
-      if (this.model.isSnapping) {
-        selectedPixel = this.model.pixelOfCurrent
+    $(this.view).on("view:selectChanged", (_e, selectedControlIndex, selectedPixel) =>{
+      this.model.updateStateCurrent(selectedControlIndex, selectedPixel)
+      if (this.view.isSnapping) {
+        selectedPixel = this.model.pixelOfCurrent(selectedControlIndex)
       }
-      this.view.updatePosAndValue(selectedPixel, this.model.currentValue)
+      console.log(this.model.selectedValues);
+      
+      this.view.updatePosAndValue(selectedControlIndex, selectedPixel, this.model.currentValue(selectedControlIndex))
     })
   }
 
   initTrigger() {
-    $(this.view).trigger("view:selectChanged", this.model.pixelOfCurrent)
+    $(this.view).trigger("view:selectChanged", [
+      0,
+      this.model.pixelOfCurrent(0)
+    ])
+    if (this.model.currentArr.length > 1) {
+      $(this.view).trigger("view:selectChanged", [
+        1,
+        this.model.pixelOfCurrent(1)
+      ])
+    }
   }
 }

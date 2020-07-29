@@ -11,9 +11,10 @@ window.sliders = [];
 const defaultConfig: PluginConfig = {
   range: [0, 100],
   step: 1,
-  current: 0,
+  current: [0],
   snapping: false,
-  class: ''
+  class: '',
+  selectRange: false
 };
 
 
@@ -53,7 +54,8 @@ const defaultConfig: PluginConfig = {
     this.each(function() {
       const stateForView = {
         class: config.class, 
-        snapping: config.snapping
+        snapping: config.snapping,
+        selectRange: config.selectRange
       }
       const view = new SliderView($(this), stateForView);
       const model = new SliderModel(config);
