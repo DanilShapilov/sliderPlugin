@@ -15,7 +15,8 @@ const defaultConfig: PluginConfig = {
   snapping: false,
   class: '',
   selectRange: false,
-  vertical: false
+  vertical: false,
+  progressBar: true
 };
 
 
@@ -62,7 +63,8 @@ const defaultConfig: PluginConfig = {
         class: `${config.class} ${config.vertical ? 'vertical': ''}`, 
         snapping: config.snapping,
         selectRange: config.selectRange,
-        vertical: config.vertical
+        vertical: config.vertical,
+        progressBar: config.progressBar
       }
       const view = new SliderView($(this), stateForView);
       const model = new SliderModel(config);

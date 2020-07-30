@@ -14,11 +14,13 @@ export class SliderView implements ISliderView{
     this.$root = $root
   }
 
-  init() {
+  async init() {
     this.$slider = new Slider(this.state)
     this.$control = this.$slider.$control
 
-    $(this.$root).html(this.$slider.HTML)
+    await $(this.$root).html(this.$slider.HTML)
+
+    await this.updateProgressBar()
 
     $(this.$slider.$el).on('mousedown', this.eventHandler.bind(this))
   }
@@ -26,7 +28,7 @@ export class SliderView implements ISliderView{
   @boundMethod
   eventHandler(e: JQueryEventObject) {
     this.change(e)    
-
+    this.updateProgressBar()
     $('html').on('mousemove', this.mousemoveHandler)
     $('html').on('mouseup', this.mouseUp)
   }
@@ -34,6 +36,7 @@ export class SliderView implements ISliderView{
   @boundMethod
   mousemoveHandler(e: JQueryEventObject) {    
     this.change(e)
+    this.updateProgressBar()
   }
 
   change(e: JQueryEventObject) {
@@ -59,6 +62,11 @@ export class SliderView implements ISliderView{
     this.$slider.$selectedControl = null
     $('html').off('mousemove')
     $('html').off('mouseup')
+    this.updateProgressBar()
+  }
+
+  updateProgressBar(){
+    this.$slider.$progressBar.update(this.state.vertical, this.$control)
   }
 
   get isSnapping() {
@@ -73,6 +81,7 @@ export class SliderView implements ISliderView{
 class Slider {
   $el: HTMLDivElement;
   $control: Control[];
+  $progressBar: ProgressBar
   $selectedControl: Control | null
   private state: IViewState
 
@@ -82,6 +91,8 @@ class Slider {
     this.$el = document.createElement('div')
     this.$el.className = `slider ${this.state.class}`
 
+    this.$progressBar = new ProgressBar()
+
     if (this.state.selectRange) {
       this.$control = [new Control('0'), new Control('1')]
     }else {
@@ -89,9 +100,9 @@ class Slider {
     }
 
     if (this.state.selectRange) {
-      this.$el.append(this.$control[0].$el, this.$control[1].$el)
+      this.$el.append(this.$control[0].$el,this.state.progressBar ? this.$progressBar.element : '', this.$control[1].$el)
     }else {
-      this.$el.append(this.$control[0].$el)
+      this.$el.append(this.state.progressBar ? this.$progressBar.element : '',this.$control[0].$el)
     }
   }
 
@@ -131,7 +142,7 @@ class Slider {
   }
   removeZindexFromSelectedControl(){
     if (this.$selectedControl) {
-      $(this.$selectedControl.$el).css('z-index', 0)
+      $(this.$selectedControl.$el).css('z-index', 1)
     }
   }
 
@@ -152,6 +163,34 @@ class Slider {
   get HTML() {
     return this.$el
   }
+}
+
+class ProgressBar {
+  $el: HTMLDivElement
+  constructor(){
+    this.$el = document.createElement('div')
+    this.$el.className = 'progress'
+  }
+  public get element() : HTMLDivElement {
+    return this.$el
+  }
+
+  update(isVertical: boolean, controls: Control[]) {
+    const topOrLeft = isVertical ? 'top' : 'left'
+    const widthOrHeight = isVertical ? 'height' : 'width'
+    if (controls.length > 1) {
+      let firstControlPos = controls[0].position(isVertical)
+      let secondControlPos = controls[1].position(isVertical)
+      if (firstControlPos > secondControlPos) {
+        [firstControlPos, secondControlPos] = [secondControlPos, firstControlPos]
+      }
+      $(this.$el).css(topOrLeft, firstControlPos)
+      $(this.$el).css(widthOrHeight, secondControlPos - firstControlPos)
+    }else {
+      $(this.$el).css(widthOrHeight, controls[0].position(isVertical))
+    }
+  }
+  
 }
 
 class Control {

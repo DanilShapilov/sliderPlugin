@@ -9,11 +9,13 @@ $(".sliderPlugin1").sliderPlugin({
     step: 10,
     snapping: true,
     selectRange: true,
-    vertical: true
+    vertical: true,
+    progressBar: false
 })
 
 $(".sliderPlugin2").sliderPlugin({
     range: ['А', 'я'],
+    current: [7, 42],
     snapping: true,
     selectRange: true,
     vertical: true
@@ -21,7 +23,9 @@ $(".sliderPlugin2").sliderPlugin({
 
 $(".sliderPlugin3").sliderPlugin({
     range: ['A', 'z'],
-    snapping: true
+    snapping: true,
+    current: [5],
+    selectRange: true
 })
 
 $(".sliderPlugin4").sliderPlugin({

@@ -11,6 +11,7 @@ interface PluginConfig {
   class: string
   selectRange: boolean
   vertical: boolean
+  progressBar: boolean
 }
 
 interface IViewState {
@@ -18,6 +19,7 @@ interface IViewState {
   snapping: boolean
   selectRange: boolean
   vertical: boolean
+  progressBar: boolean
 }
 
 interface ISliderView {
