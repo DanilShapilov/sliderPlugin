@@ -10,12 +10,14 @@ interface PluginConfig {
   snapping: boolean
   class: string
   selectRange: boolean
+  vertical: boolean
 }
 
 interface IViewState {
   class: string
   snapping: boolean
   selectRange: boolean
+  vertical: boolean
 }
 
 interface ISliderView {

@@ -5,15 +5,18 @@ import './slider_plugin/SliderPlugin'
 
 $(".sliderPlugin1").sliderPlugin({
     range: [-100, 100],
-    current: [6, 9],
+    current: [6, 12],
     step: 10,
     snapping: true,
-    selectRange: true
+    selectRange: true,
+    vertical: true
 })
 
 $(".sliderPlugin2").sliderPlugin({
     range: ['А', 'я'],
-    snapping: true
+    snapping: true,
+    selectRange: true,
+    vertical: true
 })
 
 $(".sliderPlugin3").sliderPlugin({

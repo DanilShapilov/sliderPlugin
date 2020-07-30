@@ -5,7 +5,7 @@ export class SliderPresenter {
   constructor(public model:SliderModel, public view:SliderView) {
 
     this.view.init()
-    this.model.init(this.view.sliderWidth)
+    this.model.init(this.view.sliderLength)
 
     this.initEvents()
 
@@ -18,7 +18,7 @@ export class SliderPresenter {
       if (this.view.isSnapping) {
         selectedPixel = this.model.pixelOfCurrent(selectedControlIndex)
       }
-      console.log(this.model.selectedValues);
+      console.log('selectedValues: ', this.model.selectedValues);
       
       this.view.updatePosAndValue(selectedControlIndex, selectedPixel, this.model.currentValue(selectedControlIndex))
     })

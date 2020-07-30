@@ -14,13 +14,19 @@ const defaultConfig: PluginConfig = {
   current: [0],
   snapping: false,
   class: '',
-  selectRange: false
+  selectRange: false,
+  vertical: false
 };
 
 
 (function($)  {
   $.fn.sliderPlugin = function(options: PluginConfig = defaultConfig):JQuery {   
     // default configuration
+    options = {
+      ...options,
+      current: Array.isArray(options.current) ? options.current : [0]
+    }
+    
     let config: PluginConfig = $.extend({}, defaultConfig, options);
 
     // // проверка шага
@@ -53,9 +59,10 @@ const defaultConfig: PluginConfig = {
     // initialize every element
     this.each(function() {
       const stateForView = {
-        class: config.class, 
+        class: `${config.class} ${config.vertical ? 'vertical': ''}`, 
         snapping: config.snapping,
-        selectRange: config.selectRange
+        selectRange: config.selectRange,
+        vertical: config.vertical
       }
       const view = new SliderView($(this), stateForView);
       const model = new SliderModel(config);

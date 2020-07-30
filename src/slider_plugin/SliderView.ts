@@ -5,7 +5,6 @@ export class SliderView implements ISliderView{
 
   private $slider!: Slider
   private $control!: Control[]
-  private $sliderControlInfo!: ControlInfo
 
   private state: IViewState
 
@@ -18,11 +17,10 @@ export class SliderView implements ISliderView{
   init() {
     this.$slider = new Slider(this.state)
     this.$control = this.$slider.$control
-    // this.$sliderControlInfo = this.$sliderControl.$controlInfo
 
     $(this.$root).html(this.$slider.HTML)
 
-    $(this.$root).on('mousedown', this.eventHandler.bind(this))
+    $(this.$slider.$el).on('mousedown', this.eventHandler.bind(this))
   }
 
   @boundMethod
@@ -40,19 +38,24 @@ export class SliderView implements ISliderView{
 
   change(e: JQueryEventObject) {
     const selectedControlIndex: number = this.$slider.getSelectedControlIndex(e)
-    const $sliderOffset = this.$slider.offset() as JQueryCoordinates;
-    const selectedPixel = e.pageX - $sliderOffset.left - this.$control[0].width()! / 2
+    const $sliderOffset = this.$slider.offset() as number;
+    let mousePos = e.pageX
+    if (this.state.vertical) {
+      mousePos = e.pageY
+    }
+    const selectedPixel = mousePos - $sliderOffset - this.$control[0].width()! / 2
 
     $(this).trigger('view:selectChanged', [selectedControlIndex, selectedPixel])
   }
 
   public updatePosAndValue(selectedControlIndex: number, selectedPixel: number, value: string) {
-    this.$control[selectedControlIndex].changeControlPos(selectedPixel, this.sliderWidth)
+    this.$control[selectedControlIndex].changeControlPos(selectedPixel, this.sliderLength, this.state.vertical)
     this.$control[selectedControlIndex].$controlInfo.text = value
   }
 
   @boundMethod
   mouseUp(e: JQueryEventObject) {
+    this.$slider.removeZindexFromSelectedControl()
     this.$slider.$selectedControl = null
     $('html').off('mousemove')
     $('html').off('mouseup')
@@ -62,7 +65,7 @@ export class SliderView implements ISliderView{
     return this.state.snapping
   }
 
-  public get sliderWidth():number {
+  public get sliderLength():number {
     return this.$slider.width
   }
 }
@@ -96,13 +99,17 @@ class Slider {
     if (this.$selectedControl) {
       return this.$selectedControl.index;
     }
-    const $sliderOffset = this.offset() as JQueryCoordinates;
-    const selectedPixel = evt.pageX - $sliderOffset.left - this.$control[0].width()! / 2
+    const $sliderOffset = this.offset() as number;
+    let mousePos = evt.pageX
+    if (this.state.vertical) {
+      mousePos = evt.pageY
+    }
+    const selectedPixel = mousePos - $sliderOffset - this.$control[0].width()! / 2
 
     let closestControlIndex: number = 0;
     
     if (this.$control.length > 1) {
-      const arrOfControlPos = [this.$control[0].left, this.$control[1].left];
+      const arrOfControlPos = [this.$control[0].position(this.state.vertical), this.$control[1].position(this.state.vertical)];
 
       closestControlIndex = arrOfControlPos.indexOf(
         arrOfControlPos.reduce((a:number, b:number) => {
@@ -113,14 +120,32 @@ class Slider {
 
     this.$selectedControl = this.$control[closestControlIndex]
     
+    this.setZindexToSelectedControl()
+
     return closestControlIndex;
   }
+  setZindexToSelectedControl(){
+    if (this.$selectedControl) {
+      $(this.$selectedControl.$el).css('z-index', 100)
+    }
+  }
+  removeZindexFromSelectedControl(){
+    if (this.$selectedControl) {
+      $(this.$selectedControl.$el).css('z-index', 0)
+    }
+  }
 
-  public offset() {
-    return $(this.$el).offset()
+  public offset() {    
+    if (this.state.vertical) {
+      return $(this.$el).offset()!.top
+    }
+    return $(this.$el).offset()!.left
   }
 
   get width():number {
+    if (this.state.vertical) {
+      return $(this.$el).height()! - this.$control[0].height()! as number
+    }
     return $(this.$el).width()! - this.$control[0].width()! as number
   }
 
@@ -144,21 +169,28 @@ class Control {
     this.$el.append(this.$controlInfo.$el)
   }
 
-  changeControlPos(left: number, sliderWidth:number) {
-    if (left >= sliderWidth) {
-      $(this.$el).css('left', sliderWidth)
-    } else if (left <= 0) {
-      $(this.$el).css('left', 0)
+  changeControlPos(newPos: number, sliderWidth:number, isVertical: boolean) {
+    const key = isVertical ? 'top' : 'left';
+    if (newPos >= sliderWidth) {
+      $(this.$el).css(key, sliderWidth)
+    } else if (newPos <= 0) {
+      $(this.$el).css(key, 0)
     } else {
-      $(this.$el).css('left', left)
+      $(this.$el).css(key, newPos)
     }
   }
-  public get left() {
+  public position(isVertical: boolean) {
+    if (isVertical) {
+    return parseInt($(this.$el).css('top'))
+    }
     return parseInt($(this.$el).css('left'))
   }
 
   public width() {
     return $(this.$el).width()
+  }
+  public height() {
+    return $(this.$el).height()
   }
 }
 

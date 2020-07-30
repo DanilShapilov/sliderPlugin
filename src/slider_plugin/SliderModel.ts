@@ -14,14 +14,17 @@ export class SliderModel implements ISliderModel {
   }
   
   public pixelOfCurrent(index: number) {
-    return this.state.rangeOfPixels![this.state.current[index]]
+    return this.state.rangeOfPixels![this.state.current[index]] ?? 0
   }
 
   currentValue(index:number) {
-    return this.state.range[this.state.current[index]] as string
+    return this.state.range[this.state.current[index] ] as string
   }
 
   get currentArr() {
+    if (this.state.selectRange) {
+      this.state.current[1] = this.state.current[1] ?? 0
+    }
     return this.state.current
   }
 
@@ -45,8 +48,9 @@ export class SliderModel implements ISliderModel {
     const closest:number = this.state.rangeOfPixels!.reduce((a:number, b:number, i:number) => {
       return Math.abs(b - selectedPixel) < Math.abs(a - selectedPixel) ? b : a;
     });
-
+    
     const closestIndex = this.state.rangeOfPixels?.indexOf(closest) as number
+
     this.state.current[index] = closestIndex
   }
 
