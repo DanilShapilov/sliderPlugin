@@ -66,7 +66,7 @@ export class SliderView implements ISliderView{
   }
 
   public get sliderLength():number {
-    return this.$slider.width
+    return this.$slider.length
   }
 }
 
@@ -142,7 +142,7 @@ class Slider {
     return $(this.$el).offset()!.left
   }
 
-  get width():number {
+  get length():number {
     if (this.state.vertical) {
       return $(this.$el).height()! - this.$control[0].height()! as number
     }
