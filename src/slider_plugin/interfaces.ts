@@ -2,6 +2,8 @@ interface JQuery {
   sliderPlugin(options?: object): JQuery
 }
 
+type showSelectedValue = 'always' | 'hover' | 'never'
+
 interface PluginConfig {
   range: number[] | string[]
   rangeOfPixels?: number[];
@@ -12,6 +14,7 @@ interface PluginConfig {
   selectRange: boolean
   vertical: boolean
   progressBar: boolean
+  showSelected: showSelectedValue
 }
 
 interface IViewState {
@@ -20,6 +23,7 @@ interface IViewState {
   selectRange: boolean
   vertical: boolean
   progressBar: boolean
+  showSelected: showSelectedValue
 }
 
 interface ISliderView {

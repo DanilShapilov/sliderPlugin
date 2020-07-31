@@ -5,6 +5,7 @@ import './interfaces'
 import { SliderModel } from './SliderModel';
 import { generateRangeArr } from './helpers';
 
+
 // @ts-ignore
 window.sliders = [];
 
@@ -16,7 +17,8 @@ const defaultConfig: PluginConfig = {
   class: '',
   selectRange: false,
   vertical: false,
-  progressBar: true
+  progressBar: true,
+  showSelected: 'always'
 };
 
 
@@ -64,7 +66,8 @@ const defaultConfig: PluginConfig = {
         snapping: config.snapping,
         selectRange: config.selectRange,
         vertical: config.vertical,
-        progressBar: config.progressBar
+        progressBar: config.progressBar,
+        showSelected: config.showSelected
       }
       const view = new SliderView($(this), stateForView);
       const model = new SliderModel(config);

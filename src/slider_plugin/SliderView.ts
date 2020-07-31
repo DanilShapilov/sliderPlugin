@@ -22,7 +22,7 @@ export class SliderView implements ISliderView{
 
     await this.updateProgressBar()
 
-    $(this.$slider.$el).on('mousedown', this.eventHandler.bind(this))
+    await $(this.$slider.$el).on('mousedown', this.eventHandler.bind(this))
   }
 
   @boundMethod
@@ -58,7 +58,7 @@ export class SliderView implements ISliderView{
 
   @boundMethod
   mouseUp(e: JQueryEventObject) {
-    this.$slider.removeZindexFromSelectedControl()
+    this.$slider.removeZindex()
     this.$slider.$selectedControl = null
     $('html').off('mousemove')
     $('html').off('mouseup')
@@ -94,9 +94,9 @@ class Slider {
     this.$progressBar = new ProgressBar()
 
     if (this.state.selectRange) {
-      this.$control = [new Control('0'), new Control('1')]
+      this.$control = [new Control('0', this.state.showSelected), new Control('1', this.state.showSelected)]
     }else {
-      this.$control = [new Control('0')]
+      this.$control = [new Control('0', this.state.showSelected)]
     }
 
     if (this.state.selectRange) {
@@ -131,18 +131,26 @@ class Slider {
 
     this.$selectedControl = this.$control[closestControlIndex]
     
-    this.setZindexToSelectedControl()
+    this.addZindex()
 
     return closestControlIndex;
   }
-  setZindexToSelectedControl(){
+  addZindex(){
     if (this.$selectedControl) {
       $(this.$selectedControl.$el).css('z-index', 100)
+      this.whenDragged('add')
     }
   }
-  removeZindexFromSelectedControl(){
+  removeZindex(){
     if (this.$selectedControl) {
       $(this.$selectedControl.$el).css('z-index', 1)
+      this.whenDragged('remove')
+    }
+  }
+
+  whenDragged(key: 'add' | 'remove'){
+    if (this.state.showSelected === 'hover') {
+      this.$selectedControl?.$el.classList[key]('always')
     }
   }
 
@@ -197,11 +205,11 @@ class Control {
   $el: HTMLDivElement;
   $controlInfo: ControlInfo
   index: number
-  constructor(index:string) {
+  constructor(index:string, show:string) {
     this.index = +index
     this.$el = document.createElement('div')
     this.$el.setAttribute('data-control_index', index)
-    this.$el.className = `slider__control`
+    this.$el.className = `slider__control ${show}`
 
     this.$controlInfo = new ControlInfo()
 

@@ -10,7 +10,8 @@ $(".sliderPlugin1").sliderPlugin({
     snapping: true,
     selectRange: true,
     vertical: true,
-    progressBar: false
+    progressBar: false,
+    showSelected: 'hover'
 })
 
 $(".sliderPlugin2").sliderPlugin({

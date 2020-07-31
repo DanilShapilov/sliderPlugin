@@ -67,11 +67,22 @@ $arrow-size: 3px;
     background-color: red;
     z-index: 1;
 
-    // &:hover{
-    //   .slider__control-info{
-    //     display: flex;
-    //   }
-    // }
+    &.hover {
+      &:hover
+      .slider__control-info{
+        display: flex;
+      }
+    }
+    &.always {
+      .slider__control-info{
+        display: flex;
+      }
+    }
+    &.never {
+      .slider__control-info{
+        display: none;
+      }
+    }
   }
 
   &__control-info{
@@ -87,8 +98,7 @@ $arrow-size: 3px;
 
     color: #fff;
     font-size: 12px;
-    // display: none;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     
