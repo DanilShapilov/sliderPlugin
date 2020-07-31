@@ -11,7 +11,9 @@ $(".sliderPlugin1").sliderPlugin({
     selectRange: true,
     vertical: true,
     progressBar: false,
-    showSelected: 'hover'
+    showSelected: 'hover',
+    showScale: true,
+    scaleStep: 5
 })
 
 $(".sliderPlugin2").sliderPlugin({
@@ -25,18 +27,35 @@ $(".sliderPlugin2").sliderPlugin({
 $(".sliderPlugin3").sliderPlugin({
     range: ['A', 'z'],
     snapping: true,
-    current: [5],
-    selectRange: true
+    current: [0,6],
+    selectRange: true,
+    showScale: true,
+    scaleStep: 3
 })
 
 $(".sliderPlugin4").sliderPlugin({
-    range: [1, 2, 3, 4, 5, 6],
-    step: 2,
-    snapping: true
+    range: [-100, 100],
+    snapping: true,
+    current: [2, 5],
+    selectRange: true,
+    showScale: true,
+    step: 10
 })
 
 $(".sliderPlugin5").sliderPlugin({
-    range: [1, 2, 3, 4, 5, 6],
+    range: [-100, 100],
+    snapping: true,
+    current: [2, 5],
+    selectRange: true,
+    showScale: true,
+    scaleHighlighting: false,
+    step: 10
+})
+
+$(".sliderPlugin6").sliderPlugin({
+    range: [1, 2, 3, 4, 5, 6, 7],
     current: [0],
-    step: 2
+    snapping: true,
+    showScale: true,
+    scaleStep: 0
 })

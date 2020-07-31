@@ -7,6 +7,8 @@ export class SliderPresenter {
     this.view.init()
     this.model.init(this.view.sliderLength)
 
+    this.view.updateState(this.model.getState())
+
     this.initEvents()
 
     this.initTrigger()
@@ -20,7 +22,7 @@ export class SliderPresenter {
       }
       console.log('selectedValues: ', this.model.selectedValues);
       
-      this.view.updatePosAndValue(selectedControlIndex, selectedPixel, this.model.currentValue(selectedControlIndex))
+      this.view.updatePosAndValue(selectedControlIndex, selectedPixel, this.model.currentValue(selectedControlIndex), this.model.currentArr)
     })
   }
 

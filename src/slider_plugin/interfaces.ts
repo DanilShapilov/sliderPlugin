@@ -15,15 +15,23 @@ interface PluginConfig {
   vertical: boolean
   progressBar: boolean
   showSelected: showSelectedValue
+  showScale: boolean
+  scaleStep: number
+  scaleHighlighting: boolean
 }
 
 interface IViewState {
   class: string
+  range?: number[] | string[]
+  rangeOfPixels?: number[];
   snapping: boolean
   selectRange: boolean
   vertical: boolean
   progressBar: boolean
   showSelected: showSelectedValue
+  showScale: boolean
+  scaleStep: number
+  scaleHighlighting: boolean
 }
 
 interface ISliderView {

@@ -18,7 +18,11 @@ const defaultConfig: PluginConfig = {
   selectRange: false,
   vertical: false,
   progressBar: true,
-  showSelected: 'always'
+  showSelected: 'always',
+
+  showScale: false,
+  scaleStep: 1,
+  scaleHighlighting: true
 };
 
 
@@ -62,23 +66,15 @@ const defaultConfig: PluginConfig = {
     // initialize every element
     this.each(function() {
       const stateForView = {
-        class: `${config.class} ${config.vertical ? 'vertical': ''}`, 
-        snapping: config.snapping,
-        selectRange: config.selectRange,
-        vertical: config.vertical,
-        progressBar: config.progressBar,
-        showSelected: config.showSelected
+        ...config,
+        class: `${config.class} ${config.vertical ? 'vertical': ''}`
       }
       const view = new SliderView($(this), stateForView);
       const model = new SliderModel(config);
       const presenter = new SliderPresenter(model, view);
   
       // @ts-ignore
-      window.sliders.push({
-        view,
-        presenter,
-        model
-      })
+      window.sliders.push(presenter)
     });
 
     return this;

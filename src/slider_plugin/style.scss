@@ -29,6 +29,60 @@ $arrow-size: 3px;
     background-color: rgb(255, 180, 40);
   }
 
+  .scale{
+    position: absolute;
+    width: 100%;
+    // background-color: beige;
+    height: 30px;
+    top: $height;
+    user-select: none;
+    left: $control-size/2 - 6px;
+    &:not(.vertical){
+      padding-top: 10px;
+    }
+
+    &.vertical{
+      width: 30px;
+      height: 100%;
+      top: 3px;
+      padding-left: 14px;
+      // left: -($control-size)/2 - $height - 10px;
+      .scale__el{
+        transform: rotate(-90deg);
+      }
+    }
+
+    &__el{
+      font-size: 12px;
+      position: absolute;
+      min-width: 12px;
+      width: 12px;
+      max-width: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &.selected{
+        color: red;
+        font-weight: bold;
+
+        & .scale__line{
+          background-color: red;
+        }
+      }
+
+      &.hidden{
+        display: none;
+      }
+      
+      & .scale__line{
+        width: 1px;
+        height: 3px;
+        background-color: #333;
+      }
+    }
+  }
+
   &.vertical{
     width: $height !important;
     height: 100%;
@@ -40,7 +94,7 @@ $arrow-size: 3px;
 
     .slider__control-info{
       top: (($control-size / 2) + ($info-height / 2)) - $info-height;
-      left: (($control-size / 2) + ($info-width / 2)) - $info-width * 2;
+      left:(($control-size / 2) + ($info-width / 2)) - $info-width * 2;
       
       &::after {
         content: '';

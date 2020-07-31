@@ -25,6 +25,15 @@ export class SliderView implements ISliderView{
     await $(this.$slider.$el).on('mousedown', this.eventHandler.bind(this))
   }
 
+  updateState(newState: object){
+    this.state = {
+      ...this.state,
+      ...newState
+    }
+
+    this.$slider.updateState(newState)
+  }
+
   @boundMethod
   eventHandler(e: JQueryEventObject) {
     this.change(e)    
@@ -40,6 +49,10 @@ export class SliderView implements ISliderView{
   }
 
   change(e: JQueryEventObject) {
+    // DEBUG 
+    // console.log('scaleState',this.$slider.$scale?.scaleState);
+    
+    // DEBUG END
     const selectedControlIndex: number = this.$slider.getSelectedControlIndex(e)
     const $sliderOffset = this.$slider.offset() as number;
     let mousePos = e.pageX
@@ -51,9 +64,13 @@ export class SliderView implements ISliderView{
     $(this).trigger('view:selectChanged', [selectedControlIndex, selectedPixel])
   }
 
-  public updatePosAndValue(selectedControlIndex: number, selectedPixel: number, value: string) {
+  public updatePosAndValue(selectedControlIndex: number, selectedPixel: number, value: string, current:number[]) {
     this.$control[selectedControlIndex].changeControlPos(selectedPixel, this.sliderLength, this.state.vertical)
     this.$control[selectedControlIndex].$controlInfo.text = value
+
+    if (this.$slider.$scale) {
+      this.$slider.$scale.highliteEls(current)
+    }
   }
 
   @boundMethod
@@ -82,6 +99,7 @@ class Slider {
   $el: HTMLDivElement;
   $control: Control[];
   $progressBar: ProgressBar
+  $scale?: Scale
   $selectedControl: Control | null
   private state: IViewState
 
@@ -90,6 +108,10 @@ class Slider {
     this.state = state
     this.$el = document.createElement('div')
     this.$el.className = `slider ${this.state.class}`
+
+    if (this.state.showScale) {
+      this.$scale = new Scale(this.state, this.$el)
+    }
 
     this.$progressBar = new ProgressBar()
 
@@ -103,6 +125,16 @@ class Slider {
       this.$el.append(this.$control[0].$el,this.state.progressBar ? this.$progressBar.element : '', this.$control[1].$el)
     }else {
       this.$el.append(this.state.progressBar ? this.$progressBar.element : '',this.$control[0].$el)
+    }
+  }
+
+  updateState(newState: object){
+    this.state = {
+      ...this.state,
+      ...newState
+    }
+    if (this.$scale) {
+      this.$scale.updateState(newState)
     }
   }
 
@@ -173,6 +205,97 @@ class Slider {
   }
 }
 
+class Scale {
+  $wrapper: HTMLDivElement
+  $els!: HTMLDivElement[]
+  constructor(private state:IViewState, private $root:HTMLDivElement) {
+    this.$wrapper = document.createElement('div')
+    this.$wrapper.classList.add('scale')
+    this.$els = []
+  }
+
+  highliteEls(current: number[]){
+    this.$els.forEach( (el, index) =>{
+      if ( this.shouldBeHighlited(current, index) ) {
+        el.classList.add('selected')
+      }else {
+        el.classList.remove('selected')
+      }
+    })
+  }
+
+  shouldBeHighlited(current: number[], index:number){
+    if (this.state.scaleHighlighting) {
+      let min = current[0]
+      let max = current[1]
+      if (min > max) {
+        [min, max] = [max, min]
+      }
+      if ( (current.length > 1) 
+      && ( (index >= min) 
+      && (index <= max) ) ) {
+        return true
+      }
+    }
+      return current.includes(index)
+  }
+
+  generateAndAppendScale(){
+    if (this.state.vertical) {
+      this.$wrapper.classList.add('vertical')
+    }
+    this.state.range?.forEach( (value: string | number, index:number, arr: string[] | number[]) => {
+      // const stepForPos = 100 / arr.length;
+      const el = document.createElement('div')
+      el.classList.add('scale__el')
+      const line = document.createElement('div')
+      line.classList.add('scale__line')
+      const val = document.createElement('div')
+      val.classList.add('scale__val')
+      val.textContent = value as string
+
+      if (index % this.state.scaleStep !== 0) {
+        el.classList.add('hidden')
+
+        if (this.state.scaleStep === 0) {
+          const isOdd = (arr.length) % 2 !== 0
+          
+          if (index === 0 
+            || index === arr.length-1 
+            || (isOdd && index === (arr.length - 1) / 2 )) {
+            el.classList.remove('hidden')
+          }
+        }
+      }
+
+      el.append(line, val)
+
+      this.$els.push(el)
+
+      if (this.state.vertical) {
+        $(el).css('top', this.state.rangeOfPixels![index])
+      }else{
+        $(el).css('left', this.state.rangeOfPixels![index])
+      }
+      this.$wrapper.appendChild(el)
+    } )
+
+    this.$root.appendChild(this.$wrapper)
+  }
+
+  get scaleState(){
+    return this.state
+  }
+
+  updateState(newState: object){
+    this.state = {
+      ...this.state,
+      ...newState
+    }
+    this.generateAndAppendScale()
+  }
+}
+
 class ProgressBar {
   $el: HTMLDivElement
   constructor(){
@@ -193,9 +316,9 @@ class ProgressBar {
         [firstControlPos, secondControlPos] = [secondControlPos, firstControlPos]
       }
       $(this.$el).css(topOrLeft, firstControlPos)
-      $(this.$el).css(widthOrHeight, secondControlPos - firstControlPos)
+      $(this.$el).css(widthOrHeight, secondControlPos - firstControlPos + controls[0].width()! )
     }else {
-      $(this.$el).css(widthOrHeight, controls[0].position(isVertical))
+      $(this.$el).css(widthOrHeight, controls[0].position(isVertical)  + controls[0].width()!)
     }
   }
   

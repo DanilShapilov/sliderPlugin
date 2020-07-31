@@ -12,6 +12,10 @@ export class SliderModel implements ISliderModel {
 
     this.generateRangeOfPixels(sliderWidth)
   }
+
+  getState() {
+    return this.state
+  }
   
   public pixelOfCurrent(index: number) {
     return this.state.rangeOfPixels![this.state.current[index]] ?? 0
