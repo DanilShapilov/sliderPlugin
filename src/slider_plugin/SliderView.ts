@@ -1,14 +1,14 @@
 import {boundMethod} from 'autobind-decorator'
 import { deepCopy } from './helpers';
-export class SliderView implements ISliderView{
+export class SliderView {
   private $root: JQuery;
 
   private $slider!: Slider
   private $control!: Control[]
 
-  private state: IViewState
+  private state: PluginConfig
 
-  constructor($root: JQuery, state:IViewState) {
+  constructor($root: JQuery, state:PluginConfig) {
     this.state = deepCopy(state)
 
     this.$root = $root
@@ -68,6 +68,8 @@ export class SliderView implements ISliderView{
     this.$control[selectedControlIndex].changeControlPos(selectedPixel, this.sliderLength, this.state.vertical)
     this.$control[selectedControlIndex].$controlInfo.text = value
 
+    this.updateProgressBar()
+
     if (this.$slider.$scale) {
       this.$slider.$scale.highliteEls(current)
     }
@@ -79,7 +81,7 @@ export class SliderView implements ISliderView{
     this.$slider.$selectedControl = null
     $('html').off('mousemove')
     $('html').off('mouseup')
-    this.updateProgressBar()
+    
   }
 
   updateProgressBar(){
@@ -101,9 +103,9 @@ class Slider {
   $progressBar: ProgressBar
   $scale?: Scale
   $selectedControl: Control | null
-  private state: IViewState
+  private state: PluginConfig
 
-  constructor(state:IViewState) {
+  constructor(state:PluginConfig) {
     this.$selectedControl = null;
     this.state = state
     this.$el = document.createElement('div')
@@ -208,7 +210,7 @@ class Slider {
 class Scale {
   $wrapper: HTMLDivElement
   $els!: HTMLDivElement[]
-  constructor(private state:IViewState, private $root:HTMLDivElement) {
+  constructor(private state:PluginConfig, private $root:HTMLDivElement) {
     this.$wrapper = document.createElement('div')
     this.$wrapper.classList.add('scale')
     this.$els = []
@@ -241,11 +243,13 @@ class Scale {
   }
 
   generateAndAppendScale(){
+    this.$els = []
+    $(this.$wrapper).empty()
+
     if (this.state.vertical) {
       this.$wrapper.classList.add('vertical')
     }
     this.state.range?.forEach( (value: string | number, index:number, arr: string[] | number[]) => {
-      // const stepForPos = 100 / arr.length;
       const el = document.createElement('div')
       el.classList.add('scale__el')
       const line = document.createElement('div')
@@ -277,9 +281,11 @@ class Scale {
       }else{
         $(el).css('left', this.state.rangeOfPixels![index])
       }
-      this.$wrapper.appendChild(el)
+      
     } )
-
+    this.$els.forEach((el) => {
+      this.$wrapper.appendChild(el)
+    })
     this.$root.appendChild(this.$wrapper)
   }
 

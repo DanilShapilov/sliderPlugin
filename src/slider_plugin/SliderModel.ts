@@ -1,6 +1,6 @@
 import { deepCopy, generateRangeArr } from "./helpers";
 
-export class SliderModel implements ISliderModel {
+export class SliderModel {
   private state: PluginConfig
   constructor(state:PluginConfig){
     this.state = deepCopy(state)
@@ -11,6 +11,10 @@ export class SliderModel implements ISliderModel {
     this.state.range = generateRangeArr(this.state.range, this.state.step)
 
     this.generateRangeOfPixels(sliderWidth)
+  }
+
+  resizeLogic(newSliderWidth:number){
+    this.generateRangeOfPixels(newSliderWidth)
   }
 
   getState() {

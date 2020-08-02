@@ -1,88 +1,50 @@
 import { SliderPresenter } from './SliderPresenter'
 import { SliderView } from './SliderView'
 import './style.scss'
-import './interfaces'
 import { SliderModel } from './SliderModel';
-import { generateRangeArr } from './helpers';
+import './interfaces';
 
 
-// @ts-ignore
-window.sliders = [];
+export class sliderPlugin{
+    private _el: HTMLElement;
+    private _$el: JQuery;
+    private _initSettings: PluginConfig;
 
-const defaultConfig: PluginConfig = {
-  range: [0, 100],
-  step: 1,
-  current: [0],
-  snapping: false,
-  class: '',
-  selectRange: false,
-  vertical: false,
-  progressBar: true,
-  showSelected: 'always',
+    private view!: SliderView
+    private model!: SliderModel
+    private presenter!: SliderPresenter
 
-  showScale: false,
-  scaleStep: 1,
-  scaleHighlighting: true
-};
+    public selectedValues: () => string | string[];
+    public resized: () => void
 
+    constructor(element: HTMLElement, options: PluginConfig) {
+        this._el = element;
+        this._$el = $(element);
+        this._initSettings = options
 
-(function($)  {
-  $.fn.sliderPlugin = function(options: PluginConfig = defaultConfig):JQuery {   
-    // default configuration
-    options = {
-      ...options,
-      current: Array.isArray(options.current) ? options.current : [0]
+        this.selectedValues = () => this.model.selectedValues;
+
+        this.resized = () => { $(this.presenter).trigger('plugin:resized') }
+
+        this.init()
     }
-    
-    let config: PluginConfig = $.extend({}, defaultConfig, options);
 
-    // // проверка шага
-    // if ( (config.step % 1) !== 0 || typeof config.step !== 'number') {
-    //   throw new Error(`
-    //   SliderPlugin: step should be type of number, and  an integer
-    //     The element is:
-    //       class: ${this[0].className}
-    //       id:${this[0].id}
-    //   `);
-    // }
+    static resizeObserver: ResizeObserver = new ResizeObserver(entries =>{
+      entries.forEach( e => {
+        const element = e.target
+        $(element).data('sliderPlugin').resized()
+      })
+    })
 
-    // // проверка куррента(индекс)
-    // if (config.current > config.range.length - 1 || config.current < 0) {
-    //   throw new Error(`
-    //   SliderPlugin: your current option:'${config.current}' not exists in range array,
-    //    your range array has ${config.range.length} elements, so the last index is ${config.range.length - 1}
-    //    The element is:
-    //     class: ${this[0].className}
-    //     id:${this[0].id}
-    //    `);
-    // }
-    
-    // main function
-    // function DoSomething($el: JQuery) {
-    //     $($el).html(view.toHTML())
-    // }
-    
+    async init(){
+      this.view = await new SliderView(this._$el, this._initSettings);
+      this.model = await new SliderModel(this._initSettings);
+      this.presenter = await new SliderPresenter(this.model, this.view);
 
-    // initialize every element
-    this.each(function() {
-      const stateForView = {
-        ...config,
-        class: `${config.class} ${config.vertical ? 'vertical': ''}`
-      }
-      const view = new SliderView($(this), stateForView);
-      const model = new SliderModel(config);
-      const presenter = new SliderPresenter(model, view);
-  
-      // @ts-ignore
-      window.sliders.push(presenter)
-    });
-
-    return this;
-  };
-  
-  $(function () {
-    if ($(".sliderPlugin").length) {
-      $(".sliderPlugin").sliderPlugin();
+      await this.observeResize()
     }
-  })
-})(jQuery);
+
+    observeResize(){
+      sliderPlugin.resizeObserver.observe(this._el)
+    }
+}

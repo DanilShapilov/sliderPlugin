@@ -1,5 +1,5 @@
 interface JQuery {
-  sliderPlugin(options?: object): JQuery
+  sliderPlugin(options?: object): any
 }
 
 type showSelectedValue = 'always' | 'hover' | 'never'
@@ -20,25 +20,27 @@ interface PluginConfig {
   scaleHighlighting: boolean
 }
 
-interface IViewState {
-  class: string
-  range?: number[] | string[]
-  rangeOfPixels?: number[];
-  snapping: boolean
-  selectRange: boolean
-  vertical: boolean
-  progressBar: boolean
-  showSelected: showSelectedValue
-  showScale: boolean
-  scaleStep: number
-  scaleHighlighting: boolean
+declare interface ResizeObserver {
+  observe(target: Element): void;
+  unobserve(target: Element): void;
+  disconnect(): void;
 }
 
-interface ISliderView {
+declare var ResizeObserver: {
+  prototype: ResizeObserver;
+  new(callback: ResizeObserverCallback): ResizeObserver;
+};
 
+interface ResizeObserverSize {
+    inlineSize: number;
+    blockSize: number;
 }
 
-interface ISliderModel {
+type ResizeObserverCallback = (entries: ReadonlyArray<ResizeObserverEntry>, observer: ResizeObserver) => void;
+
+interface ResizeObserverEntry {
+    readonly target: Element;
+    readonly contentRect: DOMRectReadOnly;
+    readonly borderBoxSize: ResizeObserverSize;
+    readonly contentBoxSize: ResizeObserverSize;
 }
-
-

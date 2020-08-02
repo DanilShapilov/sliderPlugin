@@ -20,10 +20,17 @@ export class SliderPresenter {
       if (this.view.isSnapping) {
         selectedPixel = this.model.pixelOfCurrent(selectedControlIndex)
       }
-      console.log('selectedValues: ', this.model.selectedValues);
       
       this.view.updatePosAndValue(selectedControlIndex, selectedPixel, this.model.currentValue(selectedControlIndex), this.model.currentArr)
     })
+
+    $(this).on('plugin:resized', () => {
+      this.model.resizeLogic(this.view.sliderLength)
+      this.view.updateState(this.model.getState())
+
+      this.initTrigger()
+    })
+
   }
 
   initTrigger() {
