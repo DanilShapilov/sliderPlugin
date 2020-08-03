@@ -24,7 +24,7 @@ export class sliderPlugin{
 
         this.selectedValues = () => this.model.selectedValues;
 
-        this.resized = () => { $(this.presenter).trigger('plugin:resized') }
+        this.resized = () => { $(this.view).trigger('plugin:resized') }
 
         this.init()
     }

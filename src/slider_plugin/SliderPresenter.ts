@@ -24,7 +24,7 @@ export class SliderPresenter {
       this.view.updatePosAndValue(selectedControlIndex, selectedPixel, this.model.currentValue(selectedControlIndex), this.model.currentArr)
     })
 
-    $(this).on('plugin:resized', () => {
+    $(this.view).on('plugin:resized', () => {
       this.model.resizeLogic(this.view.sliderLength)
       this.view.updateState(this.model.getState())
 
