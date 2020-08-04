@@ -25,7 +25,7 @@ const defaultConfig: PluginConfig = {
       // default configuration
       options = {
         ...options,
-        class: `${options.class ?? ''} ${options.vertical ? 'vertical': ''}`,
+        class: `${options.class ?? ''}`,
         current: Array.isArray(options.current) ? options.current : [0]
       }
       

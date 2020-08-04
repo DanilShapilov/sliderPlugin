@@ -5,6 +5,7 @@ $info-height: $info-width - 10px;
 $arrow-size: 3px;
 
 .slider {
+  user-select: none;
   box-sizing: border-box;
   & *{
     box-sizing: border-box;
@@ -35,7 +36,6 @@ $arrow-size: 3px;
     // background-color: beige;
     height: 30px;
     top: $height;
-    user-select: none;
     left: $control-size/2 - 6px;
     &:not(.vertical){
       padding-top: 10px;
@@ -147,8 +147,6 @@ $arrow-size: 3px;
     width: $info-width;
     height: $info-height;
     border-radius: 5px;
-
-    user-select: none;
 
     color: #fff;
     font-size: 12px;
