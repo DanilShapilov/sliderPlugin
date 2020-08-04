@@ -1,83 +1,144 @@
 import { deepCopy, generateRangeArr } from "./helpers";
+import { isArray } from "jquery";
 
 export class SliderModel {
   private state: PluginConfig
   private initRange: string[] | number[]
-  constructor(state:PluginConfig){
+  constructor(state: PluginConfig) {
     this.state = deepCopy(state)
     this.initRange = deepCopy(this.state.range)
     // range: options.range !== undefined ? generateRangeArr(options.range, options.step ?? defaultConfig.step) : generateRangeArr(defaultConfig.range, options.step ?? defaultConfig.step)
   }
 
-  init(sliderWidth:number) {
+  init(sliderWidth: number) {
     this.state.range = generateRangeArr(this.state.range, this.state.step)
 
     this.generateRangeOfPixels(sliderWidth)
   }
+
+  scaleHighlighting(val: boolean) {
+    if (typeof val !== 'boolean') {
+      console.warn('scaleHighlighting option should take boolean: true or false');
+      return
+    }
+    this.state.scaleHighlighting = val
+    $(this).trigger('model:stateChanged', 'updateViewState')
+  }
+
+  scaleStep(val: number) {
+    if (typeof val !== 'number') {
+      console.warn('scaleStep option should take INTEGER');
+      return
+    }
+    this.state.scaleStep = val
+    $(this).trigger('model:stateChanged', 'updateViewState')
+  }
+
+
+  showScale(val: boolean) {
+    if (typeof val !== 'boolean') {
+      console.warn('showScale option should take boolean: true or false');
+      return
+    }
+    this.state.showScale = val
+    $(this).trigger('model:stateChanged', 'updateViewState')
+  }
+
   showSelected(val: showSelectedValue | boolean) {
+    if (val !== 'always'
+      && val !== 'hover'
+      && val !== 'never'
+      && val !== true
+      && val !== false
+    ) {
+      console.warn(`showSelected option can take:
+        boolean: true or false,
+        string: "always" | "hover" | "never"`);
+      return
+    }
     if (val === true) {
       val = 'always'
-    }else if (val === false) {
+    } else if (val === false) {
       val = 'never'
     }
     this.state.showSelected = val
-    $(this).trigger('model:stateChanged', 'showSelected')
+    $(this).trigger('model:stateChanged', 'updateViewState')
   }
 
 
   progressBar(val: boolean) {
+    if (typeof val !== 'boolean') {
+      console.warn('progressBar option should take boolean: true or false');
+      return
+    }
     this.state.progressBar = val
-    $(this).trigger('model:stateChanged', 'progressBar')
+    $(this).trigger('model:stateChanged', 'updateViewState')
   }
 
   vertical(val: boolean) {
+    if (typeof val !== 'boolean') {
+      console.warn('vertical option should take boolean: true or false');
+      return
+    }
     this.state.vertical = val
-    $(this).trigger('model:stateChanged', 'vertical')
+    $(this).trigger('model:stateChanged', 'redrawWholeView')
   }
 
   selectRange(val: boolean) {
+    if (typeof val !== 'boolean') {
+      console.warn('selectRange option should take boolean: true or false');
+      return
+    }
     this.state.selectRange = val
     this.state.current = [this.state.current[0]]
-    $(this).trigger('model:stateChanged', 'selectRange')
+    $(this).trigger('model:stateChanged', 'redrawWholeView')
   }
 
   changeClass(val: string): void {
+    if (typeof val !== 'string') {
+      console.warn('changeClass option should take string');
+      return
+    }
     this.state.class = val
-    $(this).trigger('model:stateChanged', 'changeClass')
+    $(this).trigger('model:stateChanged', 'redrawWholeView')
   }
 
-  snapping(value: boolean){
-    if (typeof value !== 'boolean') {
+  snapping(val: boolean) {
+    if (typeof val !== 'boolean') {
       console.warn('Snapping option should take boolean: true or false');
       return
     }
-    this.state.snapping = value
-    $(this).trigger('model:stateChanged', 'snapping')
+    this.state.snapping = val
+    $(this).trigger('model:stateChanged', 'updateViewState')
   }
 
-  changeStep(value: number): void {
-    if (value === 0 || value % 1 !== 0) {
+  changeStep(val: number): void {
+    if (val === 0 || val % 1 !== 0) {
       console.warn("Step should be more then 0 and an integer");
       return;
     }
-    this.state.step = value
+    this.state.step = val
     this.state.range = generateRangeArr(this.initRange, this.state.step)
     this.generateRangeOfPixels()
-    $(this).trigger('model:stateChanged', 'changeStep')
+    $(this).trigger('model:stateChanged', 'updateViewState')
   }
 
-  resizeLogic(newSliderWidth:number){
+  resizeLogic(newSliderWidth: number) {
     this.generateRangeOfPixels(newSliderWidth)
   }
 
-  newRange(value: string[] | number[]){
-    this.state.range = generateRangeArr(value, this.state.step)
+  newRange(val: string[] | number[]) {
+    if (!isArray(val)) {
+      console.warn('newRange should be an Array');
+      return
+    }
+    this.state.range = generateRangeArr(val, this.state.step)
     this.initRange = deepCopy(this.state.range)
     this.generateRangeOfPixels()
-    $(this).trigger('model:stateChanged', 'newRange')
+    $(this).trigger('model:stateChanged', 'updateViewState')
   }
 
-  chooseValue(first:string | number, last:string | number){
+  chooseValue(first: string | number, last: string | number) {
     const firstVal: string | undefined = first !== undefined ? String(first) : undefined
     const lastVal: string | undefined = last !== undefined ? String(last) : undefined
 
@@ -100,14 +161,14 @@ export class SliderModel {
   deleteSelected() {
     const toDelete = this.selectedValues
 
-    this.state.range = (this.state.range as string[]).filter((item:string) => {
+    this.state.range = (this.state.range as string[]).filter((item: string) => {
       return toDelete.indexOf(item) === -1
     })
 
     if (this.state.range.length < 2) {
       if (this.state.range.length === 0) {
-        this.state.range.push('out of values','out of values')
-      }else if (this.state.range.length === 1) {
+        this.state.range.push('out of values', 'out of values')
+      } else if (this.state.range.length === 1) {
         this.state.range.push('out of values')
       }
     }
@@ -122,12 +183,12 @@ export class SliderModel {
   getState() {
     return this.state
   }
-  
+
   public pixelOfCurrent(index: number) {
     return this.state.rangeOfPixels![this.state.current[index]] ?? 0
   }
 
-  currentValue(index:number) {
+  currentValue(index: number) {
     return this.state.range[this.state.current[index]] as string
   }
 
@@ -138,27 +199,27 @@ export class SliderModel {
     return this.state.current
   }
 
-  get selectedValues(){
+  get selectedValues() {
     if (!this.state.selectRange) {
       return this.currentValue(0)
     }
-      let i: number = this.state.current[0];
-      let j: number = this.state.current[1];
-      if (i > j) {
-        [i, j] = [j, i]
-      }
-      const selectedRange:string[] = []
-      for (; i <= j; i++) {
-        selectedRange.push(this.state.range[i] as string)
-      }
-      return selectedRange as string[]
+    let i: number = this.state.current[0];
+    let j: number = this.state.current[1];
+    if (i > j) {
+      [i, j] = [j, i]
+    }
+    const selectedRange: string[] = []
+    for (; i <= j; i++) {
+      selectedRange.push(this.state.range[i] as string)
+    }
+    return selectedRange as string[]
   }
 
-  public updateStateCurrent(index:number, selectedPixel: number) {
-    const closest:number = this.state.rangeOfPixels!.reduce((a:number, b:number, i:number) => {
+  public updateStateCurrent(index: number, selectedPixel: number) {
+    const closest: number = this.state.rangeOfPixels!.reduce((a: number, b: number, i: number) => {
       return Math.abs(b - selectedPixel) < Math.abs(a - selectedPixel) ? b : a;
     });
-    
+
     const closestIndex = this.state.rangeOfPixels?.indexOf(closest) as number
 
     this.state.current[index] = closestIndex
@@ -166,9 +227,9 @@ export class SliderModel {
 
   generateRangeOfPixels(sliderWidth: number | undefined = undefined) {
     if (sliderWidth === undefined) {
-      if(this.state.rangeOfPixels){
+      if (this.state.rangeOfPixels) {
         sliderWidth = this.state.rangeOfPixels[this.state.rangeOfPixels?.length - 1]
-      }else {
+      } else {
         throw new Error("Provide sliderWidth variable!");
       }
     }

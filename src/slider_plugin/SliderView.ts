@@ -112,9 +112,9 @@ class Slider {
     this.$el = document.createElement('div')
     this.$el.className = `slider ${this.state.class} ${this.state.vertical ? 'vertical': ''}`
 
-    if (this.state.showScale) {
-      this.$scale = new Scale(this.state, this.$el)
-    }
+
+    this.$scale = new Scale(this.state, this.$el)
+
 
     this.$progressBar = new ProgressBar(this.state.progressBar)
 
@@ -272,19 +272,7 @@ class Scale {
       val.classList.add('scale__val')
       val.textContent = value as string
 
-      if (index % this.state.scaleStep !== 0) {
-        el.classList.add('hidden')
-
-        if (this.state.scaleStep === 0) {
-          const isOdd = (arr.length) % 2 !== 0
-          
-          if (index === 0 
-            || index === arr.length-1 
-            || (isOdd && index === (arr.length - 1) / 2 )) {
-            el.classList.remove('hidden')
-          }
-        }
-      }
+      this.handleHidden(index, el, arr.length)
 
       el.append(line, val)
 
@@ -312,6 +300,12 @@ class Scale {
       ...this.state,
       ...newState
     }
+    this.highliteEls(this.state.current)
+    if (this.state.showScale) {
+      $(this.$wrapper).css('display', '')
+    }else if (!this.state.showScale){
+      $(this.$wrapper).css('display', 'none')
+    }
     if (this.$els.length === 0 || this.$els.length !== this.state.range.length) {
       this.generateScale()
     }else {
@@ -320,9 +314,13 @@ class Scale {
   }
 
   updateEls() {
-    this.$els.forEach((el, index) => {
+    this.$els.forEach((el, index, arr) => {
       const scaleVal = el.querySelector('.scale__val')!
       scaleVal.textContent = this.state.range[index] as string
+
+      el.classList.remove('hidden')
+      this.handleHidden(index, el, arr.length)
+
       if (this.state.vertical) {
         $(el).css('top', this.state.rangeOfPixels![index])
         $(el).css('left', '')
@@ -331,6 +329,22 @@ class Scale {
         $(el).css('top', '')
       }
     })
+  }
+
+  handleHidden(index: number, el: HTMLElement, elsArrLength: number){
+    if (index % this.state.scaleStep !== 0) {
+      el.classList.add('hidden')
+
+      if (this.state.scaleStep === 0) {
+        const isOdd = (elsArrLength) % 2 !== 0
+        
+        if (index === 0 
+          || index === elsArrLength-1 
+          || (isOdd && index === (elsArrLength - 1) / 2 )) {
+          el.classList.remove('hidden')
+        }
+      }
+    }
   }
 }
 

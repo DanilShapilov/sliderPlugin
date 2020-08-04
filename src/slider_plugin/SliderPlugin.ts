@@ -42,31 +42,18 @@ export class sliderPlugin {
   chooseValue = (first: string | number, last: string | number) => this._model.chooseValue(first, last)
   allValues = () => this._model.getState().range as string[]
   deleteSelected = () => this._model.deleteSelected()
-  newRange = (value: string[] | number[]) => this._model.newRange(value)
-  changeStep = (value: number) => this._model.changeStep(value)
+  newRange = (val: string[] | number[]) => this._model.newRange(val)
+  changeStep = (val: number) => this._model.changeStep(val)
   snapping = (val: boolean) => this._model.snapping(val)
   changeClass = (val:string) => this._model.changeClass(val)
   selectRange = (val:boolean) => this._model.selectRange(val)
   vertical = (val:boolean) => this._model.vertical(val)
   progressBar = (val:boolean) => this._model.progressBar(val)
   showSelected = (val: showSelectedValue | boolean) => this._model.showSelected(val)
-
-
-  // obj:{
-  //   _range: [0, 100],
-  //   _step: 1,
-  //   _current: [0],
-  //   _snapping: false,
-  //   _class: '',
-  //   _selectRange: false,
-  //   _vertical: false,
-  //   _progressBar: true,
-  //   showSelected: 'always',
-
-  //   showScale: false,
-  //   scaleStep: 1,
-  //   scaleHighlighting: true
-  // }
+  showScale = (val:boolean) => this._model.showScale(val)
+  scaleStep = (val: number) => this._model.scaleStep(val)
+  scaleHighlighting = (val: boolean) => this._model.scaleHighlighting(val)
+  
   observeResize() {
     sliderPlugin.resizeObserver.observe(this._el)
   }

@@ -32,17 +32,11 @@ export class SliderPresenter {
     })
 
     $(this.model).on('model:stateChanged', (_e, type: string) => {
-      if (type === 'snapping'
-        || type === 'changeStep'
-        || type === 'newRange'
-        || type === 'progressBar'
-        || type === 'showSelected') {
+      if (type === 'updateViewState') {
 
         this.view.updateState(this.model.getState())
 
-      } else if (type === 'changeClass'
-        || type === 'selectRange'
-        || type === 'vertical') {
+      } else if (type === 'redrawWholeView') {
           
         this.view.destroy()
         this.view.updateState(this.model.getState())
