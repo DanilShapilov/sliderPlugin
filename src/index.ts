@@ -5,6 +5,7 @@ import { sliderPlugin } from './slider_plugin/SliderPlugin'
 
 const defaultConfig: PluginConfig = {
     range: [0, 100],
+    generateValues: true,
     step: 1,
     current: [0],
     snapping: false,

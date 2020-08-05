@@ -1,8 +1,8 @@
-export function generateRangeArr(range: number[] | string[], step: number):string[] {
-    if (range.length === 2 && ckeckTypeForRange(range)) {
+export function generateRangeArr(range: number[] | string[], step: number, generateValues: boolean):string[] {
+    if (range.length === 2 && ckeckTypeForRange(range) && generateValues) {
         (range as Array<number | string>) = rangeGenerator(range[0], range[1])
-    } else if (range.length === 2 && !ckeckTypeForRange(range)) {
-        throw new Error('SliderPlugin: Elements of range should have same type: string or number')
+    } else if (range.length === 2 && !ckeckTypeForRange(range) && generateValues) {
+        throw new Error('SliderPlugin: If you want to "generateValues", all elements of provided range array should have same type: string or number')
     }
 
     const rangeToString: string[] = 

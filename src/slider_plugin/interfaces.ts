@@ -6,6 +6,7 @@ type showSelectedValue = 'always' | 'hover' | 'never'
 
 interface PluginConfig {
   range: number[] | string[]
+  generateValues: boolean
   rangeOfPixels?: number[];
   step: number
   current: number[]

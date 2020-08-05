@@ -7,13 +7,20 @@ export class SliderModel {
   constructor(state: PluginConfig) {
     this.state = deepCopy(state)
     this.initRange = deepCopy(this.state.range)
-    // range: options.range !== undefined ? generateRangeArr(options.range, options.step ?? defaultConfig.step) : generateRangeArr(defaultConfig.range, options.step ?? defaultConfig.step)
   }
 
   init(sliderWidth: number) {
-    this.state.range = generateRangeArr(this.state.range, this.state.step)
+    this.state.range = generateRangeArr(this.state.range, this.state.step, this.state.generateValues)
 
     this.generateRangeOfPixels(sliderWidth)
+  }
+
+  generateValues(val: boolean) {
+    if (typeof val !== 'boolean') {
+      console.warn('generateValues option should take boolean: true or false');
+      return
+    }
+    this.state.generateValues = val
   }
 
   scaleHighlighting(val: boolean) {
@@ -118,7 +125,7 @@ export class SliderModel {
       return;
     }
     this.state.step = val
-    this.state.range = generateRangeArr(this.initRange, this.state.step)
+    this.state.range = generateRangeArr(this.initRange, this.state.step, this.state.generateValues)
     this.generateRangeOfPixels()
     $(this).trigger('model:stateChanged', 'updateViewState')
   }
@@ -132,7 +139,7 @@ export class SliderModel {
       console.warn('newRange should be an Array');
       return
     }
-    this.state.range = generateRangeArr(val, this.state.step)
+    this.state.range = generateRangeArr(val, this.state.step, this.state.generateValues)
     this.initRange = deepCopy(this.state.range)
     this.generateRangeOfPixels()
     $(this).trigger('model:stateChanged', 'updateViewState')

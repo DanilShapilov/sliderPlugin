@@ -36,15 +36,17 @@ export class sliderPlugin {
 
     await this.observeResize()
   }
-
-  selectedValues = () => this._model.selectedValues;
   resized = () => { $(this._view).trigger('view:resized') }
+  selectedValues = () => this._model.selectedValues;
   chooseValue = (first: string | number, last: string | number) => this._model.chooseValue(first, last)
   allValues = () => this._model.getState().range as string[]
   deleteSelected = () => this._model.deleteSelected()
+
   newRange = (val: string[] | number[]) => this._model.newRange(val)
+  generateValues = (val: boolean) => this._model.generateValues(val)
   changeStep = (val: number) => this._model.changeStep(val)
   snapping = (val: boolean) => this._model.snapping(val)
+
   changeClass = (val:string) => this._model.changeClass(val)
   selectRange = (val:boolean) => this._model.selectRange(val)
   vertical = (val:boolean) => this._model.vertical(val)
