@@ -1,5 +1,4 @@
 import { deepCopy, generateRangeArr } from "./helpers";
-import { isArray } from "jquery";
 
 export class SliderModel {
   private state: PluginConfig
@@ -135,7 +134,7 @@ export class SliderModel {
   }
 
   newRange(val: string[] | number[]) {
-    if (!isArray(val)) {
+    if (!Array.isArray(val)) {
       console.warn('newRange should be an Array');
       return
     }

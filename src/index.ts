@@ -1,4 +1,3 @@
-import './index.scss';
 import './slider_plugin/interfaces'
 
 import { sliderPlugin } from './slider_plugin/SliderPlugin'

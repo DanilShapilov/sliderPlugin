@@ -14,9 +14,6 @@
     "test-watch": "jest --watch",
     "dev": "webpack-dev-server --open"
   },
-  "dependencies": {
-    "jquery": "^3.5.1"
-  },
   "devDependencies": {
     "@types/jquery": "^3.5.0",
     "autobind-decorator": "^2.4.0",

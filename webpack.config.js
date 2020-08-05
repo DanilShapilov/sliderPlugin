@@ -8,7 +8,7 @@ const config = {
   entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js'
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -34,31 +34,22 @@ const config = {
       '.js'
     ]
   },
-  optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
-        }
-      }
-    }
-  },
+  // optimization: {
+  //   runtimeChunk: 'single',
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       vendor: {
+  //         test: /[\\/]node_modules[\\/]/,
+  //         name: 'vendors',
+  //         chunks: 'all'
+  //       }
+  //     }
+  //   }
+  // },
   externals: {
     jQuery: 'jQuery'
   },
   plugins: [
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery',
-    //   'window.jQuery': 'jquery'
-    // }),
-    new HtmlWebpackPlugin({
-      template: "./src/index.html",
-      filename: 'index.html'
-    }),
     new CleanWebpackPlugin()
   ]
 };
