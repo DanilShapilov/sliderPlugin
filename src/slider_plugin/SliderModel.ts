@@ -181,7 +181,7 @@ export class SliderModel {
 
     this.generateRangeOfPixels()
 
-    $(this).trigger('model:stateChanged')
+    $(this).trigger('model:stateChanged', 'updateViewState')
 
     return toDelete
   }
