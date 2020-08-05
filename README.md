@@ -1,3 +1,4 @@
+[DEMO PAGE](https://danilshapilov.github.io/slider-for-fsd/)
 # slider-for-fsd
 
 Empty project.
