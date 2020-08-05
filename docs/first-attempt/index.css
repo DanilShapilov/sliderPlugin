@@ -1,0 +1,25 @@
+.wrapper{
+  width: 100%;
+  display: flex;
+  margin-bottom: 50px;
+}
+
+.controls{
+  width: 300px;
+}
+
+.container{
+  border: 1px solid salmon;
+  width: 100%;
+  height: 200px;
+}
+
+.sliderPlugin1,
+.sliderPlugin2,
+.sliderPlugin3,
+.sliderPlugin4,
+.sliderPlugin5,
+.sliderPlugin6{
+  height: 100%;
+  width: 100%;
+}

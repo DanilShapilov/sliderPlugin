@@ -54,3 +54,8 @@ $(".sliderPlugin6").sliderPlugin({
   showScale: true,
   scaleStep: 0
 })
+
+function createControls(sliderEl) {
+  const $main = $(sliderEl).closest('.control')
+  console.log($main);
+}
