@@ -67,6 +67,8 @@ class CreateControls {
     this.$main = document.createElement('div');
     this.$main.classList.add('control')
 
+    this.$main.append(this.container())
+
     this.$main.append(this.selectedValues())
     this.$main.append(this.chooseValue())
     this.$main.append(this.newRange())
@@ -81,6 +83,27 @@ class CreateControls {
     this.$main.append(this.showScale())
     this.$main.append(this.scaleStep())
     this.$main.append(this.scaleHighlighting())
+  }
+
+  container(){
+    const wrapper = document.createElement('div')
+    wrapper.classList.add('container-controls')
+    const inputWidth = document.createElement("input")
+    const inputHeight = document.createElement("input")
+    const container = $(this.$slider).closest('.container')
+    inputWidth.type = inputHeight.type = "number"
+    inputWidth.value = container.width()
+    inputWidth.onchange = () => {
+      container.width(+inputWidth.value)
+    }
+    inputHeight.type = inputHeight.type = "number"
+    inputHeight.value = container.height()
+    inputHeight.onchange = () => {
+      container.height(+inputHeight.value)
+    }
+
+    wrapper.append(`Контейнер width/height`, inputWidth, inputHeight)
+    return wrapper
   }
 
   selectedValues(){

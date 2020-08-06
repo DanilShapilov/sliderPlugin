@@ -15,14 +15,29 @@
 
 .container{
   border: 1px solid salmon;
-  width: 100%;
-  height: inherit;
+  width: 500px;
+  height: 500px;
 }
+
+
+/* Chrome, Safari, Edge, Opera */
+.container-controls input::-webkit-outer-spin-button,
+.container-controls input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.container-controls input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 textarea{
   width: 90%;
   max-width: 90%;
   min-width: 90%;
-  height: 80px;
+  height: 60px;
   resize: vertical;
 }
 
