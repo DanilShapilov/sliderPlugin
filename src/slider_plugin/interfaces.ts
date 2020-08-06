@@ -19,6 +19,8 @@ interface PluginConfig {
   showScale: boolean
   scaleStep: number
   scaleHighlighting: boolean
+
+  subscribers: Function[]
 }
 
 declare interface ResizeObserver {

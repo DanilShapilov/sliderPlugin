@@ -1,4 +1,4 @@
-import { deepCopy, generateRangeArr } from "./helpers";
+import { deepCopy, generateRangeArr, isFunction } from "./helpers";
 
 export class SliderModel {
   private state: PluginConfig
@@ -13,6 +13,34 @@ export class SliderModel {
 
     this.generateRangeOfPixels(sliderWidth)
   }
+
+  subscribe(func: Function){
+    if (!isFunction(func)) {
+      console.warn('subscribe can only take functions');
+      return
+    }
+    this.state.subscribers.push(func)
+  }
+
+  unsubscribe(func: Function){
+    if (!isFunction(func)) {
+      console.warn('unsubscribe can only take functions');
+      return
+    }
+    const isInArray = this.state.subscribers.indexOf(func)
+    if (isInArray !== -1) {
+      this.state.subscribers.splice(isInArray, 1);
+    }else{
+      console.warn('there is no such function');
+    }
+  }
+
+  callSubs(){
+    
+    this.state.subscribers.forEach( func => func())
+  }
+
+  
 
   generateValues(val: boolean) {
     if (typeof val !== 'boolean') {

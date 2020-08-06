@@ -17,7 +17,9 @@ const defaultConfig: PluginConfig = {
   
     showScale: false,
     scaleStep: 1,
-    scaleHighlighting: true
+    scaleHighlighting: true,
+
+    subscribers: []
   };
   
   

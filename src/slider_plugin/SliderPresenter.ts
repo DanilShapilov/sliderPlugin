@@ -1,13 +1,17 @@
 import { SliderView } from './SliderView'
 import { SliderModel } from "./SliderModel";
+import { debounce } from './helpers';
 
 export class SliderPresenter {
+  private debouncedCallSubs!: Function
   constructor(public model: SliderModel, public view: SliderView) {
 
     this.view.init()
     this.model.init(this.view.sliderLength)
 
     this.view.updateState(this.model.getState())
+
+    this.debouncedCallSubs = debounce(this.model.callSubs, 300, this.model)
 
     this.initEvents()
 
@@ -20,6 +24,8 @@ export class SliderPresenter {
       if (this.view.isSnapping) {
         selectedPixel = this.model.pixelOfCurrent(selectedControlIndex)
       }
+
+      this.debouncedCallSubs()
 
       this.view.updatePosAndValue(selectedControlIndex, selectedPixel, this.model.currentValue(selectedControlIndex), this.model.currentArr)
     })
@@ -37,7 +43,7 @@ export class SliderPresenter {
         this.view.updateState(this.model.getState())
 
       } else if (type === 'redrawWholeView') {
-          
+
         this.view.destroy()
         this.view.updateState(this.model.getState())
         this.view.init()
@@ -59,4 +65,5 @@ export class SliderPresenter {
       ])
     }
   }
+
 }

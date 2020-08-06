@@ -55,6 +55,9 @@ export class sliderPlugin {
   showScale = (val:boolean) => this._model.showScale(val)
   scaleStep = (val: number) => this._model.scaleStep(val)
   scaleHighlighting = (val: boolean) => this._model.scaleHighlighting(val)
+
+  subscribe = (func: Function) => this._model.subscribe(func)
+  unsubscribe = (func: Function) => this._model.unsubscribe(func)
   
   observeResize() {
     sliderPlugin.resizeObserver.observe(this._el)

@@ -49,3 +49,16 @@ function ckeckTypeForRange(range: number[] | string[]) {
 export function deepCopy(obj: object) {
     return JSON.parse(JSON.stringify(obj))
 }
+
+export function isFunction(functionToCheck:Function) {
+    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
+}
+
+export function debounce(callback: Function, wait:number, ctx: object) {
+    let timeout: any;
+    return (...args:any) => {
+      const context = ctx;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => callback.apply(context, args), wait);
+    };
+  }
