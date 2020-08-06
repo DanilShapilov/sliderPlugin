@@ -9,10 +9,12 @@ export class SliderModel {
   }
 
   init(sliderWidth: number) {
-    this.state.range = generateRangeArr(this.state.range, this.state.step, this.state.generateValues)
+    this.state.range = generateRangeArr(this.initRange, this.state.step, this.state.generateValues)
 
     this.generateRangeOfPixels(sliderWidth)
   }
+
+
 
   subscribe(func: Function){
     if (!isFunction(func)) {
