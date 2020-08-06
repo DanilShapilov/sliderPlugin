@@ -167,7 +167,7 @@ export class SliderModel {
       return
     }
     this.state.range = generateRangeArr(val, this.state.step, this.state.generateValues)
-    this.initRange = deepCopy(this.state.range)
+    this.initRange = deepCopy(val)
     this.generateRangeOfPixels()
     $(this).trigger('model:stateChanged', 'updateViewState')
   }
