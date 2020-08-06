@@ -60,9 +60,9 @@ export class SliderModel {
   }
 
   scaleStep(val: number) {
-    if (typeof val !== 'number') {
-      console.warn('scaleStep option should take INTEGER');
-      return
+    if (val <= 0 || val % 1 !== 0) {
+      console.warn("scaleStep should be more than 0 and an integer");
+      return;
     }
     this.state.scaleStep = val
     $(this).trigger('model:stateChanged', 'updateViewState')
@@ -147,8 +147,8 @@ export class SliderModel {
   }
 
   changeStep(val: number): void {
-    if (val === 0 || val % 1 !== 0) {
-      console.warn("Step should be more then 0 and an integer");
+    if (val <= 0 || val % 1 !== 0) {
+      console.warn("Step should be more than 0 and an integer");
       return;
     }
     this.state.step = val
