@@ -5,6 +5,11 @@ export function generateRangeArr(range: number[] | string[], step: number, gener
         throw new Error('SliderPlugin: If you want to "generateValues", all elements of provided range array should have same type: string or number')
     }
 
+
+    if (step > range.length-1) {
+        step = 1;
+        console.warn('Step cannot be more than range.length');
+    }
     const rangeToString: string[] = 
     (range as Array<number | string>)
         .filter( (_el, index) => (index % step) === 0)
