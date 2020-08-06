@@ -47,6 +47,8 @@ export class SliderPresenter {
         this.view.destroy()
         this.view.updateState(this.model.getState())
         this.view.init()
+        // Нужно убрать это отсюда :) и переделать на проценты
+        $(this.view).trigger('view:resized')
       }
 
       this.initTrigger()
