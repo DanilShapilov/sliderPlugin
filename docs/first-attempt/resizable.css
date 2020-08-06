@@ -1,15 +1,18 @@
 .resizable {
     background: white;
-    position: relative;
-    /* top: 100px;
-    left: 100px; */
+    position: absolute;
+    top: 10px;
+    left: 300px;
   }
   
   .resizable .resizers{
-    /* width: 100%;
+    width: 100%;
     height: 100%;
     border: 3px solid #4286f4;
-    box-sizing: border-box; */
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   
   .resizable .resizers .resizer{

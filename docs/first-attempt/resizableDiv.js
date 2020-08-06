@@ -2,7 +2,7 @@
 function makeResizableDiv(el) {
     const element = el;
     const resizers = el.querySelectorAll('.resizer')
-    const minimum_size = 20;
+    const minimum_size = 200;
     let original_width = 0;
     let original_height = 0;
     let original_x = 0;
@@ -21,6 +21,8 @@ function makeResizableDiv(el) {
         original_mouse_y = e.pageY;
         window.addEventListener('mousemove', resize)
         window.addEventListener('mouseup', stopResize)
+
+        console.log(original_y);
       })
       
       function resize(e) {

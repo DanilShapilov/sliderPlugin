@@ -2,6 +2,7 @@
   width: 100%;
   display: flex;
   margin-bottom: 50px;
+  position: relative;
 }
 
 .control{
@@ -48,7 +49,7 @@ textarea{
 .sliderPlugin5,
 .sliderPlugin6{
   box-sizing: border-box;
-  padding: 50px 30px 50px 30px;
+  padding: 70px;
   height: 100%;
   width: 100%;
 }
