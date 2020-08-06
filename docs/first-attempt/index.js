@@ -70,14 +70,16 @@ class CreateControls {
     this.$main.append(this.selectedValues())
     this.$main.append(this.chooseValue())
     this.$main.append(this.newRange())
+    this.$main.append(this.generateValues())
   }
 
   selectedValues(){
-    const wrapper = document.createElement('div')
+    const wrapper = document.createElement('div',)
     const btnSelected = document.createElement('button')
     const btnAll = document.createElement('button')
     const btnDelSelected = document.createElement('button')
     const textArea = document.createElement('textarea')
+    textArea.value = JSON.stringify(this.methods.selectedValues(), null, 2)
     btnSelected.textContent = 'Получить выбранные'
     btnSelected.onclick = () => {
       textArea.value = JSON.stringify(this.methods.selectedValues(), null, 2)
@@ -100,13 +102,18 @@ class CreateControls {
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
     const firstInput = document.createElement('input')
-    const lastInput = document.createElement('input')
-    firstInput.value = 'Бегунок 1'
-    lastInput.value = 'Бегунок 2'
+    firstInput.value = this.methods._model.currentValue(0)
+    let lastInput;
+    const lastVal = this.methods._model.currentValue(1);
+    if (lastVal) {
+      lastInput = document.createElement('input')
+      lastInput.value = lastVal
+    }
+    
     btn.textContent = 'Выбрать значения'
-    btn.onclick = () => {this.methods.chooseValue(firstInput.value, lastInput.value)}
+    btn.onclick = () => {this.methods.chooseValue(firstInput.value, lastInput === undefined ? undefined : lastInput.value)}
 
-    wrapper.append('Если значение существует, оно будет выбрано', btn, firstInput, lastInput)
+    wrapper.append(`Если значение существует, оно будет выбрано`, btn, firstInput, lastInput ?? '')
     return wrapper
   }
 
@@ -121,6 +128,23 @@ class CreateControls {
     }
 
     wrapper.append(btn, textArea)
+    return wrapper
+  }
+
+  generateValues(){
+    const wrapper = document.createElement('div')
+    const btn = document.createElement('button')
+    let generateValuesState = this.methods._model.state.generateValues
+    btn.textContent = `${generateValuesState ? 'Выключить' : 'Включить'} генерацию`
+    btn.onclick = () => {
+      this.methods.generateValues(!generateValuesState)
+      generateValuesState = !generateValuesState
+      btn.textContent = `${generateValuesState ? 'Выключить' : 'Включить'} генерацию`
+    }
+
+    wrapper.append(`Слайдер может генерировать значения сам,
+    если передать массив из двух аргументов одинакового типа
+    в диапазон, пример: [-100, 100] ['A', 'z'] ['А', 'я']`, btn)
     return wrapper
   }
 
