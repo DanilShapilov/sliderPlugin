@@ -6,6 +6,7 @@
 
 .control{
   width: 300px;
+  flex-shrink: 0;
 }
 
 .control > div{
@@ -22,6 +23,7 @@ textarea{
   max-width: 90%;
   min-width: 90%;
   height: 160px;
+  resize: none;
 }
 
 .sliderPlugin1,

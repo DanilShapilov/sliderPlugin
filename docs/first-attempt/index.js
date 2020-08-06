@@ -151,8 +151,14 @@ async function createControls() {
   const allSliders = await document.querySelectorAll('[class^="sliderPlugin"]')
 
   await allSliders.forEach( async slider => {
-    const sliderControls = await new CreateControls(slider)
+    let sliderControls = await new CreateControls(slider)
     await $(slider).closest('.container').before(sliderControls.HTML)
+
+    sliderControls.methods.subscribe(() => {
+      $(sliderControls.HTML).remove()
+      sliderControls = new CreateControls(slider)
+      $(slider).closest('.container').before(sliderControls.HTML)
+    })
   })
 }
 
