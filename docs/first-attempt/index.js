@@ -71,6 +71,16 @@ class CreateControls {
     this.$main.append(this.chooseValue())
     this.$main.append(this.newRange())
     this.$main.append(this.generateValues())
+    this.$main.append(this.changeStep())
+    this.$main.append(this.snapping())
+    this.$main.append(this.changeClass())
+    this.$main.append(this.selectRange())
+    this.$main.append(this.vertical())
+    this.$main.append(this.progressBar())
+    this.$main.append(this.showSelected())
+    this.$main.append(this.showScale())
+    this.$main.append(this.scaleStep())
+    this.$main.append(this.scaleHighlighting())
   }
 
   selectedValues(){
@@ -113,7 +123,7 @@ class CreateControls {
     btn.textContent = 'Выбрать значения'
     btn.onclick = () => {this.methods.chooseValue(firstInput.value, lastInput === undefined ? undefined : lastInput.value)}
 
-    wrapper.append(`Если значение существует, оно будет выбрано`, btn, firstInput, lastInput ?? '')
+    wrapper.append(`Если значение существует, оно будет выбрано [бегунок 1, бегунок 2]`, btn, firstInput, lastInput ?? '')
     return wrapper
   }
 
@@ -148,17 +158,158 @@ class CreateControls {
     return wrapper
   }
 
-  // generateValues
-  // changeStep
-  // snapping
-  // changeClass
-  // selectRange
-  // vertical
-  // progressBar
-  // showSelected
-  // showScale
-  // scaleStep
-  // scaleHighlighting
+  changeStep(){
+    const wrapper = document.createElement('div')
+    const input = document.createElement("input")
+    input.type = "number"
+    input.value = this.methods._model.state.step
+    input.onchange = () => {
+      this.methods.changeStep(input.value)
+    }
+
+    wrapper.append(`Шаг`, input)
+    return wrapper
+  }
+
+  snapping(){
+    const wrapper = document.createElement('div')
+    const btn = document.createElement('button')
+    let snappingState = this.methods._model.state.snapping
+    btn.textContent = `${snappingState ? 'Выключить' : 'Включить'} примагничиваение`
+    btn.onclick = () => {
+      this.methods.snapping(!snappingState)
+      snappingState = !snappingState
+      btn.textContent = `${snappingState ? 'Выключить' : 'Включить'} примагничиваение`
+    }
+
+    wrapper.append(`Snapping:`, btn)
+    return wrapper
+  }
+
+  changeClass(){
+    const wrapper = document.createElement('div')
+    const input = document.createElement("input")
+    input.value = this.methods._model.state.class
+    input.onchange = () => {
+      this.methods.changeClass(input.value)
+    }
+
+    wrapper.append(`Class (enter чтобы применить):`, input)
+    return wrapper
+  }
+
+  selectRange(){
+    const wrapper = document.createElement('div')
+    const btn = document.createElement('button')
+    let selectRangeState = this.methods._model.state.selectRange
+    btn.textContent = `${selectRangeState ? 'Один бегунок' : 'Два бегунка'}`
+    btn.onclick = () => {
+      this.methods.selectRange(!selectRangeState)
+      selectRangeState = !selectRangeState
+      btn.textContent = `${selectRangeState ? 'Один бегунок' : 'Два бегунка'}`
+    }
+
+    wrapper.append(`selectRange:`, btn)
+    return wrapper
+  }
+
+  vertical(){
+    const wrapper = document.createElement('div')
+    const btn = document.createElement('button')
+    let verticalState = this.methods._model.state.vertical
+    btn.textContent = `${verticalState ? 'Горизонтальный' : 'Вертикальный'}`
+    btn.onclick = () => {
+      this.methods.vertical(!verticalState)
+      verticalState = !verticalState
+      btn.textContent = `${verticalState ? 'Горизонтальный' : 'Вертикальный'}`
+    }
+
+    wrapper.append(`vertical:`, btn)
+    return wrapper
+  }
+
+  progressBar(){
+    const wrapper = document.createElement('div')
+    const btn = document.createElement('button')
+    let progressBarState = this.methods._model.state.progressBar
+    btn.textContent = `${progressBarState ? 'Выкл' : 'Вкл'}`
+    btn.onclick = () => {
+      this.methods.progressBar(!progressBarState)
+      progressBarState = !progressBarState
+      btn.textContent = `${progressBarState ? 'Выкл' : 'Вкл'}`
+    }
+
+    wrapper.append(`progressBar:`, btn)
+    return wrapper
+  }
+
+  showSelected(){
+    const wrapper = document.createElement('div')
+    const btnOnHover = document.createElement('button')
+    const btnAlways = document.createElement('button')
+    const btnNever = document.createElement('button')
+
+    const showSelectedState = this.methods._model.state.showSelected
+
+    btnOnHover.textContent = `hover`
+    btnAlways.textContent = `always`
+    btnNever.textContent = `never`
+    $(btnOnHover).css('backgroundColor', btnOnHover.textContent === showSelectedState ? 'green' : '')
+    $(btnAlways).css('backgroundColor', btnAlways.textContent === showSelectedState ? 'green' : '')
+    $(btnNever).css('backgroundColor', btnNever.textContent === showSelectedState ? 'green' : '')
+
+
+    btnOnHover.onclick = () => this.methods.showSelected('hover')
+    btnAlways.onclick = () => this.methods.showSelected('always')
+    btnNever.onclick = () => this.methods.showSelected('never')
+
+    wrapper.append(`showSelected:`, btnOnHover, btnAlways, btnNever)
+    return wrapper
+  }
+
+  showScale(){
+    const wrapper = document.createElement('div')
+    const btn = document.createElement('button')
+    let showScaleState = this.methods._model.state.showScale
+    btn.textContent = `${showScaleState ? 'Убрать' : 'Показать'}`
+    btn.onclick = () => {
+      this.methods.showScale(!showScaleState)
+      showScaleState = !showScaleState
+      btn.textContent = `${showScaleState ? 'Убрать' : 'Показать'}`
+    }
+
+    wrapper.append(`Шкала:`, btn)
+    return wrapper
+  }
+
+  scaleStep(){
+    const wrapper = document.createElement('div')
+    const input = document.createElement("input")
+    input.type = "number"
+    input.value = this.methods._model.state.scaleStep
+    input.onchange = () => {
+      this.methods.scaleStep(+input.value)
+    }
+
+    wrapper.append(`Шаг шкалы`, input)
+    return wrapper
+  }
+
+  scaleHighlighting(){
+    const wrapper = document.createElement('div')
+    const btn = document.createElement('button')
+    let scaleHighlightingState = this.methods._model.state.scaleHighlighting
+    btn.textContent = `${scaleHighlightingState ? 'Нет' : 'Да'}`
+    btn.onclick = () => {
+      this.methods.scaleHighlighting(!scaleHighlightingState)
+      scaleHighlightingState = !scaleHighlightingState
+      btn.textContent = `${scaleHighlightingState ? 'Нет' : 'Да'}`
+    }
+
+    wrapper.append(`Подсветить выделенные знач-я на шкале:`, btn)
+    return wrapper
+  }
+
 
   get methods(){
     return $(this.$slider).data('sliderPlugin')

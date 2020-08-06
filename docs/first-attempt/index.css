@@ -22,8 +22,8 @@ textarea{
   width: 90%;
   max-width: 90%;
   min-width: 90%;
-  height: 160px;
-  resize: none;
+  height: 60px;
+  resize: vertical;
 }
 
 .sliderPlugin1,
