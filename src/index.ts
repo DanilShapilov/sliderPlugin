@@ -53,11 +53,11 @@ $(".sliderPlugin1").sliderPlugin({
     range: [-100, 100],
     current: [6, 12],
     step: 10,
+    class: 'sp-skin--toxin',
     snapping: true,
     selectRange: true,
     vertical: true,
-    progressBar: false,
-    showSelected: 'hover',
+    showSelected: 'always',
     showScale: true,
     scaleStep: 5
 })
@@ -67,13 +67,17 @@ $(".sliderPlugin2").sliderPlugin({
     current: [7, 42],
     snapping: true,
     selectRange: true,
-    vertical: true
+    vertical: true,
+    showScale: true,
+    scaleStep: 7
 })
 
 $(".sliderPlugin3").sliderPlugin({
     range: ['A', 'z'],
+    class: 'sp-skin--toxin',
     snapping: true,
     current: [0,6],
+    showSelected: 'always',
     selectRange: true,
     showScale: true,
     scaleStep: 3

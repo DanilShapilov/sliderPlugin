@@ -1,8 +1,9 @@
 import { SliderPresenter } from './SliderPresenter'
 import { SliderView } from './SliderView'
-import './style.scss'
 import { SliderModel } from './SliderModel';
 import './interfaces';
+import './style.scss'
+import './skins.scss'
 
 
 export class sliderPlugin {

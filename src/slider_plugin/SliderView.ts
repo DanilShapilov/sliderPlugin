@@ -183,7 +183,7 @@ class Slider {
   }
   removeZindex(){
     if (this.$selectedControl) {
-      $(this.$selectedControl.$el).css('z-index', 1)
+      $(this.$selectedControl.$el).css('z-index', '')
       this.whenDragged('remove')
     }
   }
