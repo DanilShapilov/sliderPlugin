@@ -21,8 +21,6 @@ function makeResizableDiv(el) {
         original_mouse_y = e.pageY;
         window.addEventListener('mousemove', resize)
         window.addEventListener('mouseup', stopResize)
-
-        console.log(original_y);
       })
       
       function resize(e) {
