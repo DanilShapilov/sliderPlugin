@@ -65,7 +65,7 @@ $(".sliderPlugin1").sliderPlugin({
 $(".sliderPlugin2").sliderPlugin({
     range: ['А', 'я'],
     current: [7, 42],
-    class: 'sp-skin--fine-tune-circle',
+    class: 'sp-skin--fine-tune-square',
     snapping: true,
     selectRange: true,
     vertical: true,
@@ -98,6 +98,7 @@ $(".sliderPlugin5").sliderPlugin({
     range: [-100, 100],
     snapping: true,
     current: [2, 5],
+    class: 'sp-skin--fine-tune-square',
     selectRange: true,
     showScale: true,
     scaleHighlighting: false,

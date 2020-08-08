@@ -378,10 +378,10 @@ class ProgressBar {
       if (firstControlPos > secondControlPos) {
         [firstControlPos, secondControlPos] = [secondControlPos, firstControlPos]
       }
-      $(this.$el).css(topOrLeft, firstControlPos)
-      $(this.$el).css(widthOrHeight, secondControlPos - firstControlPos + controls[0].width()! )
+      $(this.$el).css(topOrLeft, firstControlPos + (controls[0].width()! / 2))
+      $(this.$el).css(widthOrHeight, secondControlPos - firstControlPos  )
     }else {
-      $(this.$el).css(widthOrHeight, controls[0].position(isVertical)  + controls[0].width()!)
+      $(this.$el).css(widthOrHeight, controls[0].position(isVertical) + (controls[0].width()! / 2))
     }
   }
   

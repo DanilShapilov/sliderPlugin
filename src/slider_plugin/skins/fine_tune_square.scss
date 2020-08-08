@@ -1,12 +1,12 @@
-$height: 6px;
-$control-size: 16px;
+$height: 20px;
+$control-size: 36px;
 $info-width: 30px;
 $info-height: $info-width - 10px;
 $arrow-size: 3px;
 $horizontal-gradient: linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%);
 $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
 
-.sp-skin--toxin.slider {
+.sp-skin--fine-tune-square.slider {
   user-select: none;
   box-sizing: border-box;
   & *{
@@ -14,11 +14,10 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
   }
 
   position: relative;
-  background-color: #fff;
-  box-shadow: inset 0 0 0 1px rgba(31, 32, 65, 0.25);
+  background-color: #fed1b1;
   width: 100% !important;
   height: $height;
-  border-radius: $height;
+  border-radius: 4px;
   cursor: pointer;
 
   & .progress{
@@ -28,18 +27,18 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
     position: absolute;
     z-index: 1;
     // ------
-    background: $horizontal-gradient;
+    background: #fd8c42;
   }
 
   & .slider__control {
     position: absolute;
     top: $height / 2;
     transform: translateY(-50%);
-    width: $control-size;
+    width: $control-size - 16px;
     height: $control-size;
-    border-radius: 50%;
-    border: 2px solid #FFFFFF;
-    background: $horizontal-gradient;
+    border-radius: 4px;
+    border: 2px solid #0a2038;
+    background: #fff;
     z-index: 10;
 
     &.hover {
@@ -64,18 +63,18 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
     top: -$arrow-size - 2px;
     left: 50%;
     transform: translate(-50%, -100%);
-    background: $horizontal-gradient;
+    background: transparent;
     width: auto;
-    min-width: 24px;
+    min-width: $control-size;
     max-width: 600px;
     padding: 10px 6px;
     transition: max-width 300ms;
     height: $info-height;
-    border-radius: 10px;
+    border-radius: 4px;
 
-    color: #fff;
-    border: 2px solid #FFFFFF;
-    font-size: 12px;
+    color: #060e23;
+    border: none;
+    font-size: 16px;
     display: none;
     align-items: center;
     justify-content: center;
@@ -101,13 +100,14 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
     height: 100%;
 
     .progress{
-      background: $vertical-gradient;
     }
 
     .slider__control {
+      width: $control-size;
+      height: $control-size - 16px;
+
       left: $height / 2;
       transform: translateX(-50%);
-      background: $vertical-gradient;
     }
 
     .slider__control-info{
@@ -137,22 +137,22 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
   & .scale{
     position: absolute;
     width: 100%;
-    height: 30px;
-    left: -4px;
+    height: $height;
+    left: -1px;
     top: 50%;
     transform: translateY(50%);
 
     &.vertical{
-      width: 30px;
+      width: $height;
       height: 100%;
-      top: -4px;
+      top: -2px;
       left: 50%;
       transform: translateX(50%);
       .scale__el{
-        transform: rotate(-90deg) translateX(-2px);
+        transform: rotate(-90deg) translateY(2px) translateX(-5px);
 
         &.selected{
-          transform: rotate(-90deg) translateX(-2px) translateY(4px);
+          transform: rotate(-90deg) translateY(6px);
         }
       }
     }
@@ -171,12 +171,12 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
       transition: .35s ease-out;
 
       &.selected{
-        color: #1F2041;
+        color: #0a2038;
         font-weight: bold;
 
         & .scale__line{
-          background-color: #1F2041;
-          height: 6px;
+          background-color: #0a2038;
+          height: 12px;
         }
       }
 
