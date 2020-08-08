@@ -6,8 +6,8 @@ async function createSliders() {
     step: 10,
     snapping: true,
     selectRange: true,
-    vertical: true,
     progressBar: false,
+    class: 'sp-skin--material',
     showSelected: 'hover',
     showScale: true,
     scaleStep: 5
@@ -16,6 +16,7 @@ async function createSliders() {
   await $(".sliderPlugin2").sliderPlugin({
     range: ['А', 'я'],
     current: [7, 42],
+    class: 'sp-skin--fine-tune-square',
     snapping: true,
     selectRange: true,
     vertical: true
@@ -24,6 +25,7 @@ async function createSliders() {
   await $(".sliderPlugin3").sliderPlugin({
     range: ['A', 'z'],
     snapping: true,
+    class: 'sp-skin--fine-tune-circle',
     current: [0,6],
     selectRange: true,
     showScale: true,
@@ -33,6 +35,7 @@ async function createSliders() {
   await $(".sliderPlugin4").sliderPlugin({
     range: [-100, 100],
     snapping: true,
+    class: 'sp-skin--toxin',
     current: [2, 5],
     selectRange: true,
     showScale: true,
