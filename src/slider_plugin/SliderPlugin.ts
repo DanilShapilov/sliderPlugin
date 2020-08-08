@@ -3,7 +3,7 @@ import { SliderView } from './SliderView'
 import { SliderModel } from './SliderModel';
 import './interfaces';
 import './style.scss'
-import './skins.scss'
+import './skins/toxin.scss'
 
 
 export class sliderPlugin {
