@@ -4,6 +4,7 @@ import { SliderModel } from './SliderModel';
 import './interfaces';
 import './style.scss'
 import './skins/toxin.scss'
+import './skins/fine_tune_circle.scss'
 
 
 export class sliderPlugin {
