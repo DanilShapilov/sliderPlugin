@@ -1,5 +1,5 @@
 $height: 6px;
-$control-size: 22px;
+$control-size: 16px;
 $info-width: 30px;
 $info-height: $info-width - 10px;
 $arrow-size: 3px;
@@ -14,7 +14,8 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
   }
 
   position: relative;
-  background-color: #ccc;
+  background-color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(31, 32, 65, 0.25);
   width: 100% !important;
   height: $height;
   border-radius: $height;
@@ -31,14 +32,15 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
     background: $horizontal-gradient;
   }
 
-  &__control {
+  & .slider__control {
     position: absolute;
     top: $height / 2;
     transform: translateY(-50%);
     width: $control-size;
     height: $control-size;
     border-radius: 50%;
-    background-color: red;
+    border: 2px solid #FFFFFF;
+    background: $horizontal-gradient;
     z-index: 10;
 
     &.hover {
@@ -58,21 +60,22 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
     }
   }
 
-  &__control-info{
+  & .slider__control-info{
     position: absolute;
-    top: -$arrow-size;
+    top: -$arrow-size - 2px;
     left: 50%;
     transform: translate(-50%, -100%);
-    background-color: red;
+    background: $horizontal-gradient;
     width: auto;
-    min-width: 0;
+    min-width: 24px;
     max-width: 600px;
-    padding: 0 5px;
+    padding: 10px 6px;
     transition: max-width 300ms;
     height: $info-height;
-    border-radius: 5px;
+    border-radius: 10px;
 
     color: #fff;
+    border: 2px solid #FFFFFF;
     font-size: 12px;
     display: none;
     align-items: center;
@@ -89,7 +92,7 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
       height: 0; 
       border-left: $arrow-size solid transparent;
       border-right: $arrow-size solid transparent;
-      border-top: $arrow-size solid #f00;
+      border-top: $arrow-size solid transparent;
     }
   }
   
@@ -98,15 +101,20 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
     width: $height !important;
     height: 100%;
 
+    .progress{
+      background: $vertical-gradient;
+    }
+
     .slider__control {
       left: $height / 2;
       transform: translateX(-50%);
+      background: $vertical-gradient;
     }
 
     .slider__control-info{
       top: 50%;
       transform: translate(-100%, -50%);
-      left: -$arrow-size;
+      left: -$arrow-size - 2px;
       
       &::after {
         content: '';
@@ -117,7 +125,7 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
         left: 100%;
         width: 0; 
         height: 0; 
-        border-left: $arrow-size solid #f00;
+        border-left: $arrow-size solid transparent;
         border-right: $arrow-size solid transparent;
         border-top: $arrow-size solid transparent;
         border-bottom: $arrow-size solid transparent;
@@ -127,18 +135,18 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
 
   
 
-  .scale{
+  & .scale{
     position: absolute;
     width: 100%;
     height: 30px;
-    left: 0;
+    left: -4px;
     top: 50%;
     transform: translateY(50%);
 
     &.vertical{
       width: 30px;
       height: 100%;
-      top: 0;
+      top: -4px;
       left: 50%;
       transform: translateX(50%);
       .scale__el{
@@ -148,6 +156,7 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
 
     &__el{
       font-size: 12px;
+      color: rgba(31, 32, 65, 0.5);
       position: absolute;
       min-width: 12px;
       width: 12px;
@@ -156,13 +165,15 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: color .35s ease-out;
 
       &.selected{
-        color: red;
+        color: #1F2041;
         font-weight: bold;
 
         & .scale__line{
-          background-color: red;
+          background-color: #1F2041;
+          height: 6px;
         }
       }
 
@@ -171,6 +182,7 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
       }
       
       & .scale__line{
+        transition: height .35s ease-out;
         width: 1px;
         height: 3px;
         background-color: #333;
