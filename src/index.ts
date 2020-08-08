@@ -53,11 +53,11 @@ $(".sliderPlugin1").sliderPlugin({
     range: [-100, 100],
     current: [6, 12],
     step: 10,
-    class: 'sp-skin--toxin',
+    class: 'sp-skin--material',
     snapping: true,
     selectRange: true,
     vertical: true,
-    showSelected: 'always',
+    showSelected: 'hover',
     showScale: true,
     scaleStep: 5
 })
@@ -75,10 +75,10 @@ $(".sliderPlugin2").sliderPlugin({
 
 $(".sliderPlugin3").sliderPlugin({
     range: ['A', 'z'],
-    class: 'sp-skin--toxin',
+    class: 'sp-skin--material',
     snapping: true,
     current: [0,6],
-    showSelected: 'always',
+    showSelected: 'hover',
     selectRange: true,
     showScale: true,
     scaleStep: 3
@@ -87,7 +87,7 @@ $(".sliderPlugin3").sliderPlugin({
 $(".sliderPlugin4").sliderPlugin({
     range: [-100, 100],
     snapping: true,
-    class: 'sp-skin--fine-tune-circle',
+    // class: 'sp-skin--material',
     current: [2, 5],
     selectRange: true,
     showScale: true,
@@ -108,6 +108,7 @@ $(".sliderPlugin5").sliderPlugin({
 $(".sliderPlugin6").sliderPlugin({
     range: [1, 2, 3, 4, 5, 6, 7],
     current: [0],
+    class: 'sp-skin--toxin',
     snapping: true,
     showScale: true,
     scaleStep: 0
