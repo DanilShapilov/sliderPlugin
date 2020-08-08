@@ -151,6 +151,10 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
       transform: translateX(50%);
       .scale__el{
         transform: rotate(-90deg) translateX(-2px);
+
+        &.selected{
+          transform: rotate(-90deg) translateX(-2px) translateY(4px);
+        }
       }
     }
 
@@ -165,7 +169,7 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: color .35s ease-out;
+      transition: .35s ease-out;
 
       &.selected{
         color: #1F2041;
@@ -182,7 +186,7 @@ $vertical-gradient: linear-gradient(90deg, #6FCF97 0%, #66D2EA 100%);
       }
       
       & .scale__line{
-        transition: height .35s ease-out;
+        transition: .35s ease-out;
         width: 1px;
         height: 3px;
         background-color: rgba(31, 32, 65, 0.5);
