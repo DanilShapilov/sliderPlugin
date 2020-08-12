@@ -1,13 +1,17 @@
 interface JQuery {
-  sliderPlugin(options?: object): any
+  sliderPlugin(options?: TProvidedOptions): ISliderPlugin
 }
+
+type TProvidedOptions = {
+  [P in keyof IPluginConfig]?: IPluginConfig[P];
+};
 
 type showSelectedValue = 'always' | 'hover' | 'never'
 
-interface PluginConfig {
+interface IPluginConfig {
   range: number[] | string[]
   generateValues: boolean
-  rangeOfPixels?: number[];
+  rangeOfPixels: number[];
   step: number
   current: number[]
   snapping: boolean
@@ -22,6 +26,32 @@ interface PluginConfig {
 
   subscribers: Function[]
 }
+
+interface ISliderPlugin {
+  selectedValues(): string | string[]
+  allValues(): string[]
+  deleteSelected(): string | string[]
+
+  chooseValue(first: string | number, last: string | number): ISliderPlugin
+  newRange(val: string[] | number[]): ISliderPlugin
+  generateValues(val: boolean): ISliderPlugin
+  changeStep(val: number): ISliderPlugin
+  snapping(val: boolean): ISliderPlugin
+  changeClass(val:string): ISliderPlugin
+  selectRange(val:boolean): ISliderPlugin
+  vertical(val:boolean): ISliderPlugin
+  progressBar(val:boolean): ISliderPlugin
+  showSelected(val: showSelectedValue | boolean): ISliderPlugin
+  showScale(val:boolean): ISliderPlugin
+  scaleStep(val: number): ISliderPlugin
+  scaleHighlighting(val: boolean): ISliderPlugin
+
+  subscribe(func: Function): ISliderPlugin
+  unsubscribe(func: Function): ISliderPlugin
+}
+
+
+
 
 declare interface ResizeObserver {
   observe(target: Element): void;
