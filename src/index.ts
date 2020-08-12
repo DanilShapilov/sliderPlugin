@@ -6,7 +6,7 @@ import { SliderPlugin } from './slider_plugin/SliderPlugin'
 const defaultConfig: IPluginConfig = {
     range: [0, 100],
     generateValues: true,
-    rangeOfPixels: [0, 100],
+    rangeOfPixels: [],
     step: 1,
     current: [0],
     snapping: false,
