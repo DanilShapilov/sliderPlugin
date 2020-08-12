@@ -1,6 +1,6 @@
 import { deepCopy, generateRangeArr, isFunction } from "./helpers";
 
-export class SliderModel {
+export class SliderModel implements ISliderModel {
   private state: IPluginConfig
   private initRange: string[] | number[]
   constructor(state: IPluginConfig) {
@@ -14,7 +14,9 @@ export class SliderModel {
     this.generateRangeOfPixels(sliderWidth)
   }
 
-
+  allValues(){
+    return this.state.range as string[]
+  }
 
   subscribe(func: Function){
     if (!isFunction(func)) {
@@ -195,7 +197,7 @@ export class SliderModel {
   }
 
   deleteSelected() {
-    const toDelete = this.selectedValues
+    const toDelete = this.selectedValues()
 
     this.state.range = (this.state.range as string[]).filter((item: string) => {
       return toDelete.indexOf(item) === -1
@@ -235,7 +237,7 @@ export class SliderModel {
     return this.state.current
   }
 
-  get selectedValues() {
+  selectedValues() {
     if (!this.state.selectRange) {
       return this.currentValue(0)
     }
@@ -263,8 +265,8 @@ export class SliderModel {
 
   generateRangeOfPixels(sliderWidth: number | undefined = undefined) {
     if (sliderWidth === undefined) {
-      if (this.state.rangeOfPixels) {
-        sliderWidth = this.state.rangeOfPixels[this.state.rangeOfPixels?.length - 1]
+      if (this.state.rangeOfPixels.length !== 0) {
+        sliderWidth = this.state.rangeOfPixels[this.state.rangeOfPixels.length - 1]
       } else {
         throw new Error("Provide sliderWidth variable!");
       }
