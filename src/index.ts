@@ -3,9 +3,10 @@ import './slider_plugin/interfaces'
 
 import { SliderPlugin } from './slider_plugin/SliderPlugin'
 
-const defaultConfig: PluginConfig = {
+const defaultConfig: IPluginConfig = {
     range: [0, 100],
     generateValues: true,
+    rangeOfPixels: [0, 100],
     step: 1,
     current: [0],
     snapping: false,
@@ -24,17 +25,10 @@ const defaultConfig: PluginConfig = {
   
   
   (function($)  {
-    $.fn.sliderPlugin = function(options: PluginConfig = defaultConfig) {   
+    $.fn.sliderPlugin = function(options: IPluginConfig = defaultConfig) {
+      let methodsToReturn: ISliderPlugin[] = [] 
       // default configuration
-      options = {
-        ...options,
-        class: `${options.class ?? ''}`,
-        current: Array.isArray(options.current) ? options.current : [0]
-      }
-      
-      let config: PluginConfig = $.extend({}, defaultConfig, options);
-
-      let methodsToReturn: object[] = []      
+      let config: IPluginConfig = $.extend({}, defaultConfig, options);
   
       this.each(function() {
         if ( !$.data(this, 'sliderPlugin') ) {
@@ -65,8 +59,8 @@ const defaultConfig: PluginConfig = {
     })
   })(jQuery);
 
-//@ts-ignore
-window.slider1 = $(".sliderPlugin1").sliderPlugin({
+
+$(".sliderPlugin1").sliderPlugin({
     range: [-100, 100],
     current: [6, 12],
     step: 10,
