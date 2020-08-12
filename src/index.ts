@@ -24,7 +24,7 @@ const defaultConfig: PluginConfig = {
   
   
   (function($)  {
-    $.fn.sliderPlugin = function(options: PluginConfig = defaultConfig):JQuery {   
+    $.fn.sliderPlugin = function(options: PluginConfig = defaultConfig) {   
       // default configuration
       options = {
         ...options,
@@ -33,12 +33,29 @@ const defaultConfig: PluginConfig = {
       }
       
       let config: PluginConfig = $.extend({}, defaultConfig, options);
+
+      let methodsToReturn: object[] = []      
   
-      return this.each(function() {
+      this.each(function() {
         if ( !$.data(this, 'sliderPlugin') ) {
-            $.data(this, 'sliderPlugin', new sliderPlugin(this, config))
+          methodsToReturn.push( $.data(this, 'sliderPlugin', new sliderPlugin(this, config)) )
         }
       });
+      
+      if (methodsToReturn.length > 1) {
+        return methodsToReturn
+      }else if (methodsToReturn.length === 1) {
+        return methodsToReturn[0]
+      }else if (this.length === 1){
+        return $(this).data('sliderPlugin')
+      }else if (this.length > 1) {
+        this.each(function() {
+            methodsToReturn.push( $(this).data('sliderPlugin') )
+        })
+        return methodsToReturn
+      }else{
+        throw new Error("Looks like selector you provided does not exists");
+      }
     };
     
     $(function () {
@@ -48,8 +65,8 @@ const defaultConfig: PluginConfig = {
     })
   })(jQuery);
 
-
-$(".sliderPlugin1").sliderPlugin({
+//@ts-ignore
+window.slider1 = $(".sliderPlugin1").sliderPlugin({
     range: [-100, 100],
     current: [6, 12],
     step: 10,
@@ -61,6 +78,8 @@ $(".sliderPlugin1").sliderPlugin({
     showScale: true,
     scaleStep: 5
 })
+
+
 
 $(".sliderPlugin2").sliderPlugin({
     range: ['А', 'я'],
