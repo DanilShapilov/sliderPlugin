@@ -6,9 +6,9 @@ export class SliderView {
   private $slider!: Slider
   private $control!: Control[]
 
-  private state: PluginConfig
+  private state: IPluginConfig
 
-  constructor($root: JQuery, state:PluginConfig) {
+  constructor($root: JQuery, state:IPluginConfig) {
     this.state = deepCopy(state)
 
     this.$root = $root
@@ -104,9 +104,9 @@ class Slider {
   $progressBar: ProgressBar
   $scale?: Scale
   $selectedControl: Control | null
-  private state: PluginConfig
+  private state: IPluginConfig
 
-  constructor(state:PluginConfig) {
+  constructor(state:IPluginConfig) {
     this.$selectedControl = null;
     this.state = state
     this.$el = document.createElement('div')
@@ -216,7 +216,7 @@ class Slider {
 class Scale {
   $wrapper: HTMLDivElement
   $els!: HTMLDivElement[]
-  constructor(private state:PluginConfig, private $root:HTMLDivElement) {
+  constructor(private state:IPluginConfig, private $root:HTMLDivElement) {
     this.$wrapper = document.createElement('div')
     this.$wrapper.classList.add('scale')
     if (this.state.vertical) {

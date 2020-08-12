@@ -1,9 +1,9 @@
 import { deepCopy, generateRangeArr, isFunction } from "./helpers";
 
 export class SliderModel {
-  private state: PluginConfig
+  private state: IPluginConfig
   private initRange: string[] | number[]
-  constructor(state: PluginConfig) {
+  constructor(state: IPluginConfig) {
     this.state = deepCopy(state)
     this.initRange = deepCopy(this.state.range)
   }

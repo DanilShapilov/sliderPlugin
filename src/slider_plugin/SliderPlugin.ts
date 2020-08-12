@@ -10,15 +10,15 @@ import './skins/fine_tune_circle.scss'
 import './skins/fine_tune_square.scss'
 
 
-export class SliderPlugin {
+export class SliderPlugin implements ISliderPlugin {
    #_el: HTMLElement;
    #_$el: JQuery;
-   #_initSettings: PluginConfig;
+   #_initSettings: IPluginConfig;
    #_view!: SliderView
    #_model!: SliderModel
    #_presenter!: SliderPresenter
 
-  constructor(element: HTMLElement, options: PluginConfig) {
+  constructor(element: HTMLElement, options: IPluginConfig) {
     this.#_el = element;
     this.#_$el = $(element);
     this.#_initSettings = options
@@ -33,7 +33,7 @@ export class SliderPlugin {
     })
   })
 
-  async init() {
+  private async init() {
     this.#_view = await new SliderView(this.#_$el, this.#_initSettings);
     this.#_model = await new SliderModel(this.#_initSettings);
     this.#_presenter = await new SliderPresenter(this.#_model, this.#_view);
