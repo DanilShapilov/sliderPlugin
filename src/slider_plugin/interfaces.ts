@@ -1,5 +1,5 @@
 interface JQuery {
-  sliderPlugin(options?: TProvidedOptions): ISliderPlugin
+  sliderPlugin(options?: TProvidedOptions): ISliderPlugin | ISliderPlugin[]
 }
 
 type TProvidedOptions = {
@@ -50,7 +50,17 @@ interface ISliderPlugin {
   unsubscribe(func: Function): ISliderPlugin
 }
 
+interface ISliderModel {
 
+}
+
+interface ISliderView {
+  
+}
+
+interface ISliderPresenter {
+  
+}
 
 
 declare interface ResizeObserver {

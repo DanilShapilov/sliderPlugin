@@ -25,7 +25,7 @@ const defaultConfig: IPluginConfig = {
   
   
   (function($)  {
-    $.fn.sliderPlugin = function(options: IPluginConfig = defaultConfig) {
+    $.fn.sliderPlugin = function(options:TProvidedOptions = defaultConfig): ISliderPlugin | ISliderPlugin[] {
       let methodsToReturn: ISliderPlugin[] = [] 
       // default configuration
       let config: IPluginConfig = $.extend({}, defaultConfig, options);
