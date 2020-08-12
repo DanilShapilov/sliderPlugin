@@ -1,7 +1,7 @@
 import './index.scss';
 import './slider_plugin/interfaces'
 
-import { sliderPlugin } from './slider_plugin/SliderPlugin'
+import { SliderPlugin } from './slider_plugin/SliderPlugin'
 
 const defaultConfig: PluginConfig = {
     range: [0, 100],
@@ -38,7 +38,7 @@ const defaultConfig: PluginConfig = {
   
       this.each(function() {
         if ( !$.data(this, 'sliderPlugin') ) {
-          methodsToReturn.push( $.data(this, 'sliderPlugin', new sliderPlugin(this, config)) )
+          methodsToReturn.push( $.data(this, 'sliderPlugin', new SliderPlugin(this, config)) )
         }
       });
       

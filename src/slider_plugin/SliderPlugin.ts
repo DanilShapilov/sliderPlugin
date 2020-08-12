@@ -10,7 +10,7 @@ import './skins/fine_tune_circle.scss'
 import './skins/fine_tune_square.scss'
 
 
-export class sliderPlugin {
+export class SliderPlugin {
    #_el: HTMLElement;
    #_$el: JQuery;
    #_initSettings: PluginConfig;
@@ -63,6 +63,6 @@ export class sliderPlugin {
   unsubscribe = (func: Function) => {this.#_model.unsubscribe(func); return this}
   
   observeResize() {
-    sliderPlugin.resizeObserver.observe(this.#_el)
+    SliderPlugin.resizeObserver.observe(this.#_el)
   }
 }
