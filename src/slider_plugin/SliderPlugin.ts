@@ -41,8 +41,8 @@ export class SliderPlugin implements ISliderPlugin {
     await this.observeResize()
   }
   resized = () => { $(this.#_view).trigger('view:resized') }
-  selectedValues = () => this.#_model.selectedValues;
-  allValues = () => this.#_model.getState().range as string[]
+  selectedValues = () => this.#_model.selectedValues();
+  allValues = () => this.#_model.allValues()
   deleteSelected = () => this.#_model.deleteSelected()
 
   chooseValue = (first: string | number, last: string | number) => {this.#_model.chooseValue(first, last); return this}
