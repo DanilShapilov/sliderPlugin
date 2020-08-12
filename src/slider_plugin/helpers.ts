@@ -55,7 +55,7 @@ export function deepCopy(obj: object) {
     return JSON.parse(JSON.stringify(obj))
 }
 
-export function isFunction(functionToCheck:Function) {
+export function isFunction(functionToCheck:Function): functionToCheck is Function {
     return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
 }
 
