@@ -50,9 +50,12 @@ interface ISliderPlugin {
   unsubscribe(func: Function): ISliderPlugin
 }
 
-interface ISliderModel {
+// NEED TO CHANGE IT
+type TWhatModelCanReturn = string | string[] | void
+type ISliderModel = {
+  [P in keyof ISliderPlugin]: (Val1?:any, Val2?:any) => TWhatModelCanReturn;
+};
 
-}
 
 interface ISliderView {
   
