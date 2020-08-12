@@ -42,26 +42,25 @@ export class sliderPlugin {
   }
   resized = () => { $(this.#_view).trigger('view:resized') }
   selectedValues = () => this.#_model.selectedValues;
-  chooseValue = (first: string | number, last: string | number) => this.#_model.chooseValue(first, last)
   allValues = () => this.#_model.getState().range as string[]
   deleteSelected = () => this.#_model.deleteSelected()
 
-  newRange = (val: string[] | number[]) => this.#_model.newRange(val)
-  generateValues = (val: boolean) => this.#_model.generateValues(val)
-  changeStep = (val: number) => this.#_model.changeStep(val)
-  snapping = (val: boolean) => this.#_model.snapping(val)
+  chooseValue = (first: string | number, last: string | number) => {this.#_model.chooseValue(first, last); return this}
+  newRange = (val: string[] | number[]) => {this.#_model.newRange(val); return this}
+  generateValues = (val: boolean) => {this.#_model.generateValues(val); return this}
+  changeStep = (val: number) => {this.#_model.changeStep(val); return this}
+  snapping = (val: boolean) => {this.#_model.snapping(val); return this}
+  changeClass = (val:string) => {this.#_model.changeClass(val); return this}
+  selectRange = (val:boolean) => {this.#_model.selectRange(val); return this}
+  vertical = (val:boolean) => {this.#_model.vertical(val); return this}
+  progressBar = (val:boolean) => {this.#_model.progressBar(val); return this}
+  showSelected = (val: showSelectedValue | boolean) => {this.#_model.showSelected(val); return this}
+  showScale = (val:boolean) => {this.#_model.showScale(val); return this}
+  scaleStep = (val: number) => {this.#_model.scaleStep(val); return this}
+  scaleHighlighting = (val: boolean) => {this.#_model.scaleHighlighting(val); return this}
 
-  changeClass = (val:string) => this.#_model.changeClass(val)
-  selectRange = (val:boolean) => this.#_model.selectRange(val)
-  vertical = (val:boolean) => this.#_model.vertical(val)
-  progressBar = (val:boolean) => this.#_model.progressBar(val)
-  showSelected = (val: showSelectedValue | boolean) => this.#_model.showSelected(val)
-  showScale = (val:boolean) => this.#_model.showScale(val)
-  scaleStep = (val: number) => this.#_model.scaleStep(val)
-  scaleHighlighting = (val: boolean) => this.#_model.scaleHighlighting(val)
-
-  subscribe = (func: Function) => this.#_model.subscribe(func)
-  unsubscribe = (func: Function) => this.#_model.unsubscribe(func)
+  subscribe = (func: Function) => {this.#_model.subscribe(func); return this}
+  unsubscribe = (func: Function) => {this.#_model.unsubscribe(func); return this}
   
   observeResize() {
     sliderPlugin.resizeObserver.observe(this.#_el)
