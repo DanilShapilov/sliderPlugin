@@ -40,27 +40,28 @@ export class SliderPlugin implements ISliderPlugin {
 
     await this.observeResize()
   }
-  resized = () => { $(this.#_view).trigger('view:resized') }
+  resized() { $(this.#_view).trigger('view:resized') }
+  
   selectedValues = () => this.#_model.selectedValues();
   allValues = () => this.#_model.allValues()
   deleteSelected = () => this.#_model.deleteSelected()
 
-  chooseValue = (first: string | number, last: string | number) => {this.#_model.chooseValue(first, last); return this}
-  newRange = (val: string[] | number[]) => {this.#_model.newRange(val); return this}
-  generateValues = (val: boolean) => {this.#_model.generateValues(val); return this}
-  changeStep = (val: number) => {this.#_model.changeStep(val); return this}
-  snapping = (val: boolean) => {this.#_model.snapping(val); return this}
-  changeClass = (val:string) => {this.#_model.changeClass(val); return this}
-  selectRange = (val:boolean) => {this.#_model.selectRange(val); return this}
-  vertical = (val:boolean) => {this.#_model.vertical(val); return this}
-  progressBar = (val:boolean) => {this.#_model.progressBar(val); return this}
-  showSelected = (val: showSelectedValue | boolean) => {this.#_model.showSelected(val); return this}
-  showScale = (val:boolean) => {this.#_model.showScale(val); return this}
-  scaleStep = (val: number) => {this.#_model.scaleStep(val); return this}
-  scaleHighlighting = (val: boolean) => {this.#_model.scaleHighlighting(val); return this}
+  chooseValue = (first: string | number, last: string | number): ISliderPlugin => {this.#_model.chooseValue(first, last); return this}
+  newRange = (val: string[] | number[]): ISliderPlugin => {this.#_model.newRange(val); return this}
+  generateValues = (val: boolean): ISliderPlugin => {this.#_model.generateValues(val); return this}
+  changeStep = (val: number): ISliderPlugin => {this.#_model.changeStep(val); return this}
+  snapping = (val: boolean): ISliderPlugin => {this.#_model.snapping(val); return this}
+  changeClass = (val:string): ISliderPlugin => {this.#_model.changeClass(val); return this}
+  selectRange = (val:boolean): ISliderPlugin => {this.#_model.selectRange(val); return this}
+  vertical = (val:boolean): ISliderPlugin => {this.#_model.vertical(val); return this}
+  progressBar = (val:boolean): ISliderPlugin => {this.#_model.progressBar(val); return this}
+  showSelected = (val: showSelectedValue | boolean): ISliderPlugin => {this.#_model.showSelected(val); return this}
+  showScale = (val:boolean): ISliderPlugin => {this.#_model.showScale(val); return this}
+  scaleStep = (val: number): ISliderPlugin => {this.#_model.scaleStep(val); return this}
+  scaleHighlighting = (val: boolean): ISliderPlugin => {this.#_model.scaleHighlighting(val); return this}
 
-  subscribe = (func: Function) => {this.#_model.subscribe(func); return this}
-  unsubscribe = (func: Function) => {this.#_model.unsubscribe(func); return this}
+  subscribe = (func: Function): ISliderPlugin => {this.#_model.subscribe(func); return this}
+  unsubscribe = (func: Function): ISliderPlugin => {this.#_model.unsubscribe(func); return this}
   
   observeResize() {
     SliderPlugin.resizeObserver.observe(this.#_el)
