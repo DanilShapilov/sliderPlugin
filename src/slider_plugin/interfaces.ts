@@ -27,34 +27,43 @@ interface IPluginConfig {
   subscribers: Function[]
 }
 
-interface ISliderPlugin {
+interface IPluginMethods{
   selectedValues(): string | string[]
   allValues(): string[]
   deleteSelected(): string | string[]
 
-  chooseValue(first: string | number, last: string | number): ISliderPlugin
-  newRange(val: string[] | number[]): ISliderPlugin
-  generateValues(val: boolean): ISliderPlugin
-  changeStep(val: number): ISliderPlugin
-  snapping(val: boolean): ISliderPlugin
-  changeClass(val:string): ISliderPlugin
-  selectRange(val:boolean): ISliderPlugin
-  vertical(val:boolean): ISliderPlugin
-  progressBar(val:boolean): ISliderPlugin
-  showSelected(val: showSelectedValue | boolean): ISliderPlugin
-  showScale(val:boolean): ISliderPlugin
-  scaleStep(val: number): ISliderPlugin
-  scaleHighlighting(val: boolean): ISliderPlugin
+  chooseValue(first: string | number, last: string | number): ISliderPlugin | void
+  newRange(val: string[] | number[]): ISliderPlugin | void
+  generateValues(val: boolean): ISliderPlugin | void
+  changeStep(val: number): ISliderPlugin | void
+  snapping(val: boolean): ISliderPlugin | void
+  changeClass(val:string): ISliderPlugin | void
+  selectRange(val:boolean): ISliderPlugin | void
+  vertical(val:boolean): ISliderPlugin | void
+  progressBar(val:boolean): ISliderPlugin | void
+  showSelected(val: showSelectedValue | boolean): ISliderPlugin | void
+  showScale(val:boolean): ISliderPlugin | void
+  scaleStep(val: number): ISliderPlugin | void
+  scaleHighlighting(val: boolean): ISliderPlugin | void
 
-  subscribe(func: Function): ISliderPlugin
-  unsubscribe(func: Function): ISliderPlugin
+  subscribe(func: Function): ISliderPlugin | void
+  unsubscribe(func: Function): ISliderPlugin | void
 }
 
-// NEED TO CHANGE IT
-type TWhatModelCanReturn = string | string[] | void
-type ISliderModel = {
-  [P in keyof ISliderPlugin]: (Val1?:any, Val2?:any) => TWhatModelCanReturn;
-};
+interface ISliderPlugin extends IPluginMethods {
+  resized(): void
+}
+
+interface ISliderModel extends IPluginMethods {
+  init(sliderWidth: number): void
+  callSubs(): void
+  updateStateCurrent(selectedControlIndex: number, selectedPixel: number): void
+  getState(): IPluginConfig
+  pixelOfCurrent(index: number): number
+  currentValue(index: number): string
+  readonly currentArr: number[]
+  callSubs(): void
+}
 
 
 interface ISliderView {
