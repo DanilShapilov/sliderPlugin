@@ -1,6 +1,5 @@
 import './index.scss';
-import './slider_plugin/interfaces'
-
+import './slider_plugin/declorations/index'
 import { SliderPlugin } from './slider_plugin/SliderPlugin'
 
 const defaultConfig: IPluginConfig = {
@@ -22,8 +21,8 @@ const defaultConfig: IPluginConfig = {
 
     subscribers: []
   };
-  
-  
+
+
   (function($)  {
     $.fn.sliderPlugin = function(options:TProvidedOptions = defaultConfig): ISliderPlugin | ISliderPlugin[] {
       let methodsToReturn: ISliderPlugin[] = [] 
