@@ -14,9 +14,6 @@ export class SliderModel implements ISliderModel {
     this.generateRangeOfPixels(sliderWidth)
   }
 
-  allValues(){
-    return this.state.range as string[]
-  }
 
   subscribe(func: Function){
     if (!isFunction(func)) {
@@ -40,7 +37,6 @@ export class SliderModel implements ISliderModel {
   }
 
   callSubs(){
-    
     this.state.subscribers.forEach( func => func())
   }
 
@@ -218,23 +214,8 @@ export class SliderModel implements ISliderModel {
     return toDelete
   }
 
-  getState() {
-    return this.state
-  }
-
-  public pixelOfCurrent(index: number) {
-    return this.state.rangeOfPixels![this.state.current[index]] ?? 0
-  }
-
-  currentValue(index: number) {
-    return this.state.range[this.state.current[index]] as string
-  }
-
-  get currentArr() {
-    if (this.state.selectRange) {
-      this.state.current[1] = this.state.current[1] ?? 0
-    }
-    return this.state.current
+  allValues(){
+    return this.state.range as string[]
   }
 
   selectedValues() {
@@ -253,17 +234,37 @@ export class SliderModel implements ISliderModel {
     return selectedRange as string[]
   }
 
-  public updateStateCurrent(index: number, selectedPixel: number) {
-    const closest: number = this.state.rangeOfPixels!.reduce((a: number, b: number, i: number) => {
+  updateStateCurrent(selectedControlIndex: number, selectedPixel: number) {
+    const closest: number = this.state.rangeOfPixels.reduce((a: number, b: number, i: number) => {
       return Math.abs(b - selectedPixel) < Math.abs(a - selectedPixel) ? b : a;
     });
 
-    const closestIndex = this.state.rangeOfPixels?.indexOf(closest) as number
+    const closestIndex = this.state.rangeOfPixels.indexOf(closest) as number
 
-    this.state.current[index] = closestIndex
+    this.state.current[selectedControlIndex] = closestIndex
   }
 
-  generateRangeOfPixels(sliderWidth: number | undefined = undefined) {
+  getState():IPluginConfig {
+    return deepCopy(this.state)
+  }
+
+  pixelOfCurrent(index: number) {
+    return this.state.rangeOfPixels[this.state.current[index]] ?? 0
+  }
+
+  currentValue(index: number) {
+    return this.state.range[this.state.current[index]] as string
+  }
+
+  get currentArr() {
+    if (this.state.selectRange) {
+      this.state.current[1] = this.state.current[1] ?? 0
+    }
+    return this.state.current
+  }
+
+
+  private generateRangeOfPixels(sliderWidth: number | undefined = undefined) {
     if (sliderWidth === undefined) {
       if (this.state.rangeOfPixels.length !== 0) {
         sliderWidth = this.state.rangeOfPixels[this.state.rangeOfPixels.length - 1]
