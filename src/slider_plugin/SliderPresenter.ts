@@ -4,7 +4,7 @@ import { debounce } from './helpers';
 
 export class SliderPresenter {
   private debouncedCallSubs!: Function
-  constructor(public model: SliderModel, public view: SliderView) {
+  constructor(public model: ISliderModel, public view: ISliderView) {
     this.init()
   }
 
