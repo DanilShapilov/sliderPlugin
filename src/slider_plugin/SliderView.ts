@@ -1,6 +1,6 @@
 import {boundMethod} from 'autobind-decorator'
 import { deepCopy } from './helpers';
-export class SliderView {
+export class SliderView implements ISliderView{
   private $root: JQuery;
 
   private $slider!: Slider
@@ -15,8 +15,8 @@ export class SliderView {
   }
 
   async init() {
-    this.$slider = new Slider(this.state)
-    this.$control = this.$slider.$control
+    this.$slider = await new Slider(this.state)
+    this.$control = await this.$slider.$control
 
     await $(this.$root).html(this.$slider.HTML)
 
@@ -25,28 +25,25 @@ export class SliderView {
     await $(this.$slider.$el).on('mousedown', this.eventHandler)
   }
 
-  updateState(newState: object){
-    this.state = {
-      ...this.state,
-      ...newState
-    }
+  updateState(newState: IPluginConfig){
+    this.state = deepCopy(newState)
 
     this.$slider.updateState(newState)
   }
 
   @boundMethod
-  eventHandler(e: JQueryEventObject) {
+  private eventHandler(e: JQueryEventObject) {
     this.change(e)
     $('html').on('mousemove', this.mousemoveHandler)
     $('html').on('mouseup', this.mouseUp)
   }
 
   @boundMethod
-  mousemoveHandler(e: JQueryEventObject) {    
+  private mousemoveHandler(e: JQueryEventObject) {    
     this.change(e)
   }
 
-  change(e: JQueryEventObject) {
+  private change(e: JQueryEventObject) {
     const selectedControlIndex: number = this.$slider.getSelectedControlIndex(e)
     const $sliderOffset = this.$slider.offset() as number;
     let mousePos = e.pageX
@@ -58,35 +55,37 @@ export class SliderView {
     $(this).trigger('view:selectChanged', [selectedControlIndex, selectedPixel])
   }
 
-  public updatePosAndValue(selectedControlIndex: number, selectedPixel: number, value: string, current:number[]) {
+  updatePosAndValue(selectedControlIndex: number, selectedPixel: number, value: string, current:number[]) {
     this.$control[selectedControlIndex].changeControlPos(selectedPixel, this.sliderLength, this.state.vertical)
     this.$control[selectedControlIndex].$controlInfo.text = value
 
     this.updateProgressBar()
 
-    if (this.$slider.$scale) {
-      this.$slider.$scale.highliteEls(current)
-    }
+    this.highliteScale(current)
   }
 
   @boundMethod
-  mouseUp(e: JQueryEventObject) {
+  private mouseUp(e: JQueryEventObject) {
     this.$slider.removeZindex()
-    this.$slider.$selectedControl = null
+    this.$slider.setSelectedToNull()
     $('html').off('mousemove')
     $('html').off('mouseup')
     
   }
 
-  updateProgressBar(){
+  private updateProgressBar(){
     this.$slider.$progressBar.update(this.state.vertical, this.$control)
+  }
+
+  private highliteScale(current: number[]) {
+    this.$slider.$scale.highliteEls(current)
   }
 
   get isSnapping() {
     return this.state.snapping
   }
 
-  public get sliderLength():number {
+  get sliderLength() {
     return this.$slider.length
   }
 
@@ -98,12 +97,12 @@ export class SliderView {
   }
 }
 
-class Slider {
-  $el: HTMLDivElement;
-  $control: Control[];
+class Slider implements ISlider{
+  $el: HTMLDivElement
+  $control: Control[]
   $progressBar: ProgressBar
-  $scale?: Scale
-  $selectedControl: Control | null
+  $scale: Scale
+  private $selectedControl: Control | null
   private state: IPluginConfig
 
   constructor(state:IPluginConfig) {
@@ -112,9 +111,7 @@ class Slider {
     this.$el = document.createElement('div')
     this.$el.className = `slider ${this.state.class} ${this.state.vertical ? 'vertical': ''}`
 
-
     this.$scale = new Scale(this.state, this.$el)
-
 
     this.$progressBar = new ProgressBar(this.state.progressBar)
 
@@ -131,24 +128,19 @@ class Slider {
     }
   }
 
-  updateState(newState: object){
-    this.state = {
-      ...this.state,
-      ...newState
-    }
+  updateState(newState: IPluginConfig){
+    this.state = newState
 
     this.$progressBar.updateState(this.state.progressBar)
 
     this.$control.forEach( el => el.updateState(this.state.showSelected))
 
-    if (this.$scale) {
-      this.$scale.updateState(newState)
-    }
+    this.$scale.updateState(newState)
   }
 
   getSelectedControlIndex(evt: JQueryEventObject) {
     if (this.$selectedControl) {
-      return this.$selectedControl.index;
+      return this.$selectedControl.getIndex;
     }
     const $sliderOffset = this.offset() as number;
     let mousePos = evt.pageX
@@ -175,7 +167,12 @@ class Slider {
 
     return closestControlIndex;
   }
-  addZindex(){
+
+  setSelectedToNull(){
+    this.$selectedControl = null
+  }
+
+  private addZindex(){
     if (this.$selectedControl) {
       $(this.$selectedControl.$el).css('z-index', 100)
       this.whenDragged('add')
@@ -188,7 +185,7 @@ class Slider {
     }
   }
 
-  whenDragged(key: 'add' | 'remove'){
+  private whenDragged(key: 'add' | 'remove'){
     if (this.state.showSelected === 'hover') {
       this.$selectedControl?.$el.classList[key]('always')
     }
@@ -203,9 +200,9 @@ class Slider {
 
   get length():number {
     if (this.state.vertical) {
-      return $(this.$el).height()! - this.$control[0].height()! as number
+      return $(this.$el).height()! - this.$control[0].height()
     }
-    return $(this.$el).width()! - this.$control[0].width()! as number
+    return $(this.$el).width()! - this.$control[0].width()
   }
 
   get HTML() {
@@ -213,27 +210,117 @@ class Slider {
   }
 }
 
-class Scale {
-  $wrapper: HTMLDivElement
-  $els!: HTMLDivElement[]
+class ProgressBar implements IProgressBar{
+  private $el: HTMLDivElement
+  constructor(visible: boolean){
+    this.$el = document.createElement('div')
+    this.$el.className = 'progress'
+    
+    this.updateState(visible)
+  }
+
+  updateState(visible: boolean){
+    if (!visible) {
+      $(this.$el).css('display', 'none')
+    }else{
+      $(this.$el).css('display', '')
+    }
+  }
+
+  public get element() : HTMLDivElement {
+    return this.$el
+  }
+
+  update(isVertical: boolean, controls: Control[]) {
+    const topOrLeft = isVertical ? 'top' : 'left'
+    const widthOrHeight = isVertical ? 'height' : 'width'
+    if (controls.length > 1) {
+      let firstControlPos = controls[0].position(isVertical)
+      let secondControlPos = controls[1].position(isVertical)
+      if (firstControlPos > secondControlPos) {
+        [firstControlPos, secondControlPos] = [secondControlPos, firstControlPos]
+      }
+      $(this.$el).css(topOrLeft, firstControlPos + (controls[0].width() / 2))
+      $(this.$el).css(widthOrHeight, secondControlPos - firstControlPos  )
+    }else {
+      $(this.$el).css(widthOrHeight, controls[0].position(isVertical) + (controls[0].width() / 2))
+    }
+  }
+  
+}
+
+class Control implements IControl{
+  $el: HTMLDivElement;
+  $controlInfo: ControlInfo
+  private index: number
+  constructor(index:string, show:string) {
+    this.index = +index
+    this.$el = document.createElement('div')
+    this.$el.setAttribute('data-control_index', index)
+    this.$el.className = `slider__control ${show}`
+
+    this.$controlInfo = new ControlInfo()
+
+    this.$el.append(this.$controlInfo.element)
+  }
+
+  get getIndex(){
+    return this.index
+  }
+
+  changeControlPos(newPos: number, sliderWidth:number, isVertical: boolean) {
+    const key = isVertical ? 'top' : 'left';
+    if (newPos >= sliderWidth) {
+      $(this.$el).css(key, sliderWidth)
+    } else if (newPos <= 0) {
+      $(this.$el).css(key, 0)
+    } else {
+      $(this.$el).css(key, newPos)
+    }
+  }
+
+  updateState(showSelected: showSelectedValue): void {
+    this.$el.className = `slider__control ${showSelected}`
+  }
+
+  public position(isVertical: boolean) {
+    if (isVertical) {
+    return parseInt($(this.$el).css('top'))
+    }
+    return parseInt($(this.$el).css('left'))
+  }
+
+  public width() {
+    return $(this.$el).width() as number
+  }
+  public height() {
+    return $(this.$el).height() as number
+  }
+}
+
+class Scale implements IScale {
+  private $wrapper: HTMLDivElement
+  private $els: HTMLDivElement[] = []
   constructor(private state:IPluginConfig, private $root:HTMLDivElement) {
     this.$wrapper = document.createElement('div')
     this.$wrapper.classList.add('scale')
     if (this.state.vertical) {
       this.$wrapper.classList.add('vertical')
     }
-    this.$els = []
 
     if (this.state.rangeOfPixels) {
       if (this.$els.length === 0 || this.$els.length !== this.state.range.length) {
         this.generateScale()
       }else {
-        this.updateEls()
+        this.updateElsState()
       }
     }
   }
 
   highliteEls(current: number[]){
+    if (!this.state.showScale) {
+      return
+    }
     this.$els.forEach( (el, index) =>{
       if ( this.shouldBeHighlited(current, index) ) {
         el.classList.add('selected')
@@ -243,7 +330,7 @@ class Scale {
     })
   }
 
-  shouldBeHighlited(current: number[], index:number){
+  private shouldBeHighlited(current: number[], index:number){
     if (this.state.scaleHighlighting) {
       let min = current[0]
       let max = current[1]
@@ -259,7 +346,7 @@ class Scale {
       return current.includes(index)
   }
 
-  generateScale(){
+  private generateScale(){
     $(this.$wrapper).empty()
     this.$els = []
 
@@ -291,11 +378,7 @@ class Scale {
     this.$root.appendChild(this.$wrapper)
   }
 
-  get scaleState(){
-    return this.state
-  }
-
-  updateState(newState: object){
+  updateState(newState: IPluginConfig){
     this.state = {
       ...this.state,
       ...newState
@@ -309,11 +392,11 @@ class Scale {
     if (this.$els.length === 0 || this.$els.length !== this.state.range.length) {
       this.generateScale()
     }else {
-      this.updateEls()
+      this.updateElsState()
     }
   }
 
-  updateEls() {
+  updateElsState() {
     this.$els.forEach((el, index, arr) => {
       const scaleVal = el.querySelector('.scale__val')!
       scaleVal.textContent = this.state.range[index] as string
@@ -331,7 +414,7 @@ class Scale {
     })
   }
 
-  handleHidden(index: number, el: HTMLElement, elsArrLength: number){
+  private handleHidden(index: number, el: HTMLElement, elsArrLength: number){
     if (index % this.state.scaleStep !== 0) {
       el.classList.add('hidden')
 
@@ -348,92 +431,8 @@ class Scale {
   }
 }
 
-class ProgressBar {
-  $el: HTMLDivElement
-  constructor(visible: boolean){
-    this.$el = document.createElement('div')
-    this.$el.className = 'progress'
-    
-    this.updateState(visible)
-  }
-
-  updateState(visible: boolean){
-    if (!visible) {
-      $(this.$el).css('display', 'none')
-    }else{
-      $(this.$el).css('display', '')
-    }
-  }
-
-  public get element() : HTMLDivElement {
-    return this.$el
-  }
-
-  update(isVertical: boolean, controls: Control[]) {
-    const topOrLeft = isVertical ? 'top' : 'left'
-    const widthOrHeight = isVertical ? 'height' : 'width'
-    if (controls.length > 1) {
-      let firstControlPos = controls[0].position(isVertical)
-      let secondControlPos = controls[1].position(isVertical)
-      if (firstControlPos > secondControlPos) {
-        [firstControlPos, secondControlPos] = [secondControlPos, firstControlPos]
-      }
-      $(this.$el).css(topOrLeft, firstControlPos + (controls[0].width()! / 2))
-      $(this.$el).css(widthOrHeight, secondControlPos - firstControlPos  )
-    }else {
-      $(this.$el).css(widthOrHeight, controls[0].position(isVertical) + (controls[0].width()! / 2))
-    }
-  }
-  
-}
-
-class Control {
-  $el: HTMLDivElement;
-  $controlInfo: ControlInfo
-  index: number
-  constructor(index:string, show:string) {
-    this.index = +index
-    this.$el = document.createElement('div')
-    this.$el.setAttribute('data-control_index', index)
-    this.$el.className = `slider__control ${show}`
-
-    this.$controlInfo = new ControlInfo()
-
-    this.$el.append(this.$controlInfo.$el)
-  }
-
-  changeControlPos(newPos: number, sliderWidth:number, isVertical: boolean) {
-    const key = isVertical ? 'top' : 'left';
-    if (newPos >= sliderWidth) {
-      $(this.$el).css(key, sliderWidth)
-    } else if (newPos <= 0) {
-      $(this.$el).css(key, 0)
-    } else {
-      $(this.$el).css(key, newPos)
-    }
-  }
-
-  updateState(showSelected: string): void {
-    this.$el.className = `slider__control ${showSelected}`
-  }
-
-  public position(isVertical: boolean) {
-    if (isVertical) {
-    return parseInt($(this.$el).css('top'))
-    }
-    return parseInt($(this.$el).css('left'))
-  }
-
-  public width() {
-    return $(this.$el).width()
-  }
-  public height() {
-    return $(this.$el).height()
-  }
-}
-
-class ControlInfo {
-  $el: HTMLDivElement;
+class ControlInfo implements IControlInfo {
+  private $el: HTMLDivElement;
   constructor() {
     this.$el = document.createElement('div')
     this.$el.className = `slider__control-info`
@@ -441,5 +440,8 @@ class ControlInfo {
 
   set text(value:string){
     this.$el.innerHTML = value
+  }
+  get element(){
+    return this.$el
   }
 }
