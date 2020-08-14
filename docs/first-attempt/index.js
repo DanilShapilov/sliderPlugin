@@ -138,9 +138,9 @@ class CreateControls {
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
     const firstInput = document.createElement('input')
-    firstInput.value = this.methods._model.currentValue(0)
+    firstInput.value = this.methods.currentValue(0)
     let lastInput;
-    const lastVal = this.methods._model.currentValue(1);
+    const lastVal = this.methods.currentValue(1);
     if (lastVal) {
       lastInput = document.createElement('input')
       lastInput.value = lastVal
@@ -157,7 +157,7 @@ class CreateControls {
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
     const textArea = document.createElement('textarea')
-    textArea.value = JSON.stringify(this.methods._model.initRange, null, 2)
+    textArea.value = JSON.stringify(this.methods.getInitRange(), null, 2)
     btn.textContent = 'Задать новый диапазон'
     btn.onclick = () => {
       this.methods.newRange(JSON.parse(textArea.value))
@@ -170,7 +170,7 @@ class CreateControls {
   generateValues(){
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
-    let generateValuesState = this.methods._model.state.generateValues
+    let generateValuesState = this.methods.getState().generateValues
     btn.textContent = `${generateValuesState ? 'Выключить' : 'Включить'} генерацию`
     btn.onclick = () => {
       this.methods.generateValues(!generateValuesState)
@@ -188,7 +188,7 @@ class CreateControls {
     const wrapper = document.createElement('div')
     const input = document.createElement("input")
     input.type = "number"
-    input.value = this.methods._model.state.step
+    input.value = this.methods.getState().step
     input.onchange = () => {
       this.methods.changeStep(input.value)
     }
@@ -200,7 +200,7 @@ class CreateControls {
   snapping(){
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
-    let snappingState = this.methods._model.state.snapping
+    let snappingState = this.methods.getState().snapping
     btn.textContent = `${snappingState ? 'Выключить' : 'Включить'} примагничиваение`
     btn.onclick = () => {
       this.methods.snapping(!snappingState)
@@ -215,7 +215,7 @@ class CreateControls {
   changeClass(){
     const wrapper = document.createElement('div')
     const input = document.createElement("input")
-    input.value = this.methods._model.state.class
+    input.value = this.methods.getState().class
     input.onchange = () => {
       this.methods.changeClass(input.value)
     }
@@ -227,7 +227,7 @@ class CreateControls {
   selectRange(){
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
-    let selectRangeState = this.methods._model.state.selectRange
+    let selectRangeState = this.methods.getState().selectRange
     btn.textContent = `${selectRangeState ? 'Один бегунок' : 'Два бегунка'}`
     btn.onclick = () => {
       this.methods.selectRange(!selectRangeState)
@@ -242,7 +242,7 @@ class CreateControls {
   vertical(){
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
-    let verticalState = this.methods._model.state.vertical
+    let verticalState = this.methods.getState().vertical
     btn.textContent = `${verticalState ? 'Горизонтальный' : 'Вертикальный'}`
     btn.onclick = () => {
       this.methods.vertical(!verticalState)
@@ -257,7 +257,7 @@ class CreateControls {
   progressBar(){
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
-    let progressBarState = this.methods._model.state.progressBar
+    let progressBarState = this.methods.getState().progressBar
     btn.textContent = `${progressBarState ? 'Выкл' : 'Вкл'}`
     btn.onclick = () => {
       this.methods.progressBar(!progressBarState)
@@ -275,7 +275,7 @@ class CreateControls {
     const btnAlways = document.createElement('button')
     const btnNever = document.createElement('button')
 
-    const showSelectedState = this.methods._model.state.showSelected
+    const showSelectedState = this.methods.getState().showSelected
 
     btnOnHover.textContent = `hover`
     btnAlways.textContent = `always`
@@ -296,7 +296,7 @@ class CreateControls {
   showScale(){
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
-    let showScaleState = this.methods._model.state.showScale
+    let showScaleState = this.methods.getState().showScale
     btn.textContent = `${showScaleState ? 'Убрать' : 'Показать'}`
     btn.onclick = () => {
       this.methods.showScale(!showScaleState)
@@ -312,7 +312,7 @@ class CreateControls {
     const wrapper = document.createElement('div')
     const input = document.createElement("input")
     input.type = "number"
-    input.value = this.methods._model.state.scaleStep
+    input.value = this.methods.getState().scaleStep
     input.onchange = () => {
       this.methods.scaleStep(+input.value)
     }
@@ -324,7 +324,7 @@ class CreateControls {
   scaleHighlighting(){
     const wrapper = document.createElement('div')
     const btn = document.createElement('button')
-    let scaleHighlightingState = this.methods._model.state.scaleHighlighting
+    let scaleHighlightingState = this.methods.getState().scaleHighlighting
     btn.textContent = `${scaleHighlightingState ? 'Нет' : 'Да'}`
     btn.onclick = () => {
       this.methods.scaleHighlighting(!scaleHighlightingState)
