@@ -24,8 +24,11 @@ type showSelectedValue = 'always' | 'hover' | 'never'
 
 interface IPluginMethods{
   selectedValues(): string | string[]
+  currentValue(index: number): string
+  getInitRange(): string[] | number[]
   allValues(): string[]
   deleteSelected(): string | string[]
+  getState(): IPluginConfig
 
   chooseValue(first: string | number, last: string | number): ISliderPlugin | void
   newRange(val: string[] | number[]): ISliderPlugin | void
