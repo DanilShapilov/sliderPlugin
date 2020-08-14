@@ -4,6 +4,9 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
+ const isDev = process.env.NODE_ENV === 'development'
+ const isProd = !isDev
+
 const config = {
   entry: './src/index.ts',
   output: {
