@@ -7,4 +7,5 @@ interface ISliderModel extends IPluginMethods {
     currentValue(index: number): string
     readonly currentArr: number[]
     callSubs(): void
+    resizeLogic(newSliderWidth: number): void
   }
