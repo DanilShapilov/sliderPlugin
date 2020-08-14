@@ -56,7 +56,7 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.scaleHighlighting = val
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'scaleHighlighting')
   }
 
   scaleStep(val: number) {
@@ -65,7 +65,7 @@ export class SliderModel implements ISliderModel {
       return;
     }
     this.state.scaleStep = val
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'scaleStep')
   }
 
 
@@ -75,7 +75,7 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.showScale = val
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'showScale')
   }
 
   showSelected(val: showSelectedValue | boolean) {
@@ -96,7 +96,7 @@ export class SliderModel implements ISliderModel {
       val = 'never'
     }
     this.state.showSelected = val
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'showSelected')
   }
 
 
@@ -106,7 +106,7 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.progressBar = val
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'progressBar')
   }
 
   vertical(val: boolean) {
@@ -115,7 +115,7 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.vertical = val
-    $(this).trigger('model:stateChanged', 'redrawWholeView')
+    $(this).trigger('model:stateChanged', 'vertical')
   }
 
   selectRange(val: boolean) {
@@ -125,7 +125,7 @@ export class SliderModel implements ISliderModel {
     }
     this.state.selectRange = val
     this.state.current = [this.state.current[0]]
-    $(this).trigger('model:stateChanged', 'redrawWholeView')
+    $(this).trigger('model:stateChanged', 'selectRange')
   }
 
   changeClass(val: string): void {
@@ -134,7 +134,7 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.class = val
-    $(this).trigger('model:stateChanged', 'redrawWholeView')
+    $(this).trigger('model:stateChanged', 'changeClass')
   }
 
   snapping(val: boolean) {
@@ -143,7 +143,7 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.snapping = val
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'snapping')
   }
 
   changeStep(val: number): void {
@@ -154,7 +154,7 @@ export class SliderModel implements ISliderModel {
     this.state.step = val
     this.state.range = generateRangeArr(this.initRange, this.state.step, this.state.generateValues)
     this.generateRangeOfPixels()
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'changeStep')
   }
 
   resizeLogic(newSliderWidth: number) {
@@ -169,7 +169,7 @@ export class SliderModel implements ISliderModel {
     this.state.range = generateRangeArr(val, this.state.step, this.state.generateValues)
     this.initRange = deepCopy(val)
     this.generateRangeOfPixels()
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'newRange')
   }
 
   chooseValue(first: string | number, last: string | number) {
@@ -189,7 +189,7 @@ export class SliderModel implements ISliderModel {
         this.state.current[1] = valIndex
       }
     }
-    $(this).trigger('model:stateChanged')
+    $(this).trigger('model:stateChanged', 'chooseValue')
   }
 
   deleteSelected() {
@@ -209,7 +209,7 @@ export class SliderModel implements ISliderModel {
 
     this.generateRangeOfPixels()
 
-    $(this).trigger('model:stateChanged', 'updateViewState')
+    $(this).trigger('model:stateChanged', 'deleteSelected')
 
     return toDelete
   }
