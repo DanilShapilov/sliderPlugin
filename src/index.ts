@@ -3,7 +3,7 @@ if ( (process.env.NODE_ENV === 'development') ) {
   import('./index.scss');
 }
 
-import './slider_plugin/declorations/index'
+import './slider_plugin/declarations/index'
 import { SliderPlugin } from './slider_plugin/SliderPlugin'
 
 const defaultConfig: IPluginConfig = {
