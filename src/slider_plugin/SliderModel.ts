@@ -14,6 +14,9 @@ export class SliderModel implements ISliderModel {
     this.generateRangeOfPixels(sliderWidth)
   }
 
+  getInitRange(){
+    return this.initRange
+  }
 
   subscribe(func: Function){
     if (!isFunction(func)) {
