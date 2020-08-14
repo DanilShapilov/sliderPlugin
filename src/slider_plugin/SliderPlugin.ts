@@ -44,6 +44,9 @@ export class SliderPlugin implements ISliderPlugin {
   selectedValues = () => this.#_model.selectedValues();
   allValues = () => this.#_model.allValues()
   deleteSelected = () => this.#_model.deleteSelected()
+  currentValue = (index: number) => this.#_model.currentValue(index)
+  getInitRange = () => this.#_model.getInitRange()
+  getState = () => this.#_model.getState()
 
   chooseValue = (first: string | number, last: string | number): ISliderPlugin => {this.#_model.chooseValue(first, last); return this}
   newRange = (val: string[] | number[]): ISliderPlugin => {this.#_model.newRange(val); return this}
