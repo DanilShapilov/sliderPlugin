@@ -5,20 +5,22 @@ import { debounce } from './helpers';
 export class SliderPresenter {
   private debouncedCallSubs!: Function
   constructor(public model: SliderModel, public view: SliderView) {
-
-    this.view.init()
-    this.model.init(this.view.sliderLength)
-
-    this.view.updateState(this.model.getState())
-
-    this.debouncedCallSubs = debounce(this.model.callSubs, 300, this.model)
-
-    this.initEvents()
-
-    this.initTrigger()
+    this.init()
   }
 
-  initEvents() {
+  private async init() {
+    await this.view.init()
+    await this.model.init(this.view.sliderLength)
+    this.debouncedCallSubs = await debounce(this.model.callSubs, 300, this.model)
+
+    await this.view.updateState(this.model.getState())
+
+    await this.initEvents()
+
+    await this.initTrigger()
+  }
+
+  private initEvents() {
     $(this.view).on("view:selectChanged", (_e, selectedControlIndex, selectedPixel) => {
       this.model.updateStateCurrent(selectedControlIndex, selectedPixel)
       if (this.view.isSnapping) {
@@ -37,25 +39,26 @@ export class SliderPresenter {
       this.initTrigger()
     })
 
-    $(this.model).on('model:stateChanged', (_e, type: string) => {
-      if (type === 'updateViewState') {
-
-        this.view.updateState(this.model.getState())
-
-      } else if (type === 'redrawWholeView') {
-
-        this.view.destroy()
-        this.view.updateState(this.model.getState())
-        this.view.init()
-        // Нужно убрать это отсюда :) и переделать на проценты
-        $(this.view).trigger('view:resized')
+    const methodsWhenViewRedrawRequired = ['vertical', 'selectRange', 'changeClass']
+    $(this.model).on('model:stateChanged', async (_e, type: string) => {
+      if(type === 'chooseValue'){
+        this.initTrigger()
+        return
       }
-
-      this.initTrigger()
+      const needToRedraw = methodsWhenViewRedrawRequired.includes(type);
+      if (!needToRedraw) {
+        this.view.updateState(this.model.getState())
+        this.initTrigger()
+      } else {
+        await this.view.destroy()
+        await this.view.updateState(this.model.getState())
+        await this.view.init()
+        await $(this.view).trigger('view:resized')
+      }
     })
   }
 
-  initTrigger() {
+  private initTrigger() {
     $(this.view).trigger("view:selectChanged", [
       0,
       this.model.pixelOfCurrent(0)
