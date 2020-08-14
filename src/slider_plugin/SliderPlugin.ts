@@ -13,9 +13,9 @@ export class SliderPlugin implements ISliderPlugin {
    #_el: HTMLElement;
    #_$el: JQuery;
    #_initSettings: IPluginConfig;
-   #_view!: SliderView
-   #_model!: SliderModel
-   #_presenter!: SliderPresenter
+   #_view!: ISliderView
+   #_model!: ISliderModel
+   #_presenter!: ISliderPresenter
 
   constructor(element: HTMLElement, options: IPluginConfig) {
     this.#_el = element;
@@ -25,7 +25,7 @@ export class SliderPlugin implements ISliderPlugin {
     this.init()
   }
 
-  static resizeObserver: ResizeObserver = new ResizeObserver(entries => {
+  private static resizeObserver: ResizeObserver = new ResizeObserver(entries => {
     entries.forEach(e => {
       const element = e.target
       $(element).data('sliderPlugin').resized()
@@ -62,7 +62,7 @@ export class SliderPlugin implements ISliderPlugin {
   subscribe = (func: Function): ISliderPlugin => {this.#_model.subscribe(func); return this}
   unsubscribe = (func: Function): ISliderPlugin => {this.#_model.unsubscribe(func); return this}
   
-  observeResize() {
+  private observeResize() {
     SliderPlugin.resizeObserver.observe(this.#_el)
   }
 }
