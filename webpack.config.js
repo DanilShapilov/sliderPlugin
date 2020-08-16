@@ -8,6 +8,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
  const isProd = !isDev
 
 const config = {
+  mode: 'development',
   entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -27,6 +28,15 @@ const config = {
         test: /\.ts(x)?$/,
         loader: 'ts-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.ts$/,
+        exclude: [ path.resolve(__dirname, "test") ],
+        enforce: 'post',
+        use: {
+          loader: 'istanbul-instrumenter-loader',
+          options: { esModules: true }
+        }
       }
     ]
   },
@@ -37,6 +47,7 @@ const config = {
       '.js'
     ]
   },
+  devtool: "inline-source-map",
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
