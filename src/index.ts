@@ -2,6 +2,9 @@
 
 import '../declarations/index'
 import { SliderPlugin } from './slider_plugin/SliderPlugin'
+import { SliderView } from './slider_plugin/SliderView';
+import { SliderModel } from './slider_plugin/SliderModel';
+import { SliderPresenter } from './slider_plugin/SliderPresenter';
 
 export const defaultConfig: IPluginConfig = {
     range: [0, 100],
@@ -23,14 +26,6 @@ export const defaultConfig: IPluginConfig = {
     subscribers: []
   };
 
-const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
-  entries.forEach(e => {
-    const element = e.target;
-    $(element).data('sliderPlugin').resized();
-  });
-});
-
-
   (function($)  {
     $.fn.sliderPlugin = function(options:TProvidedOptions = defaultConfig): ISliderPlugin | ISliderPlugin[] {
       let methodsToReturn: ISliderPlugin[] = [] 
@@ -39,7 +34,12 @@ const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
   
       this.each(function() {
         if ( !$.data(this, 'sliderPlugin') ) {
-          methodsToReturn.push( $.data(this, 'sliderPlugin', new SliderPlugin(this, config, resizeObserver)) )
+          const rootEl = this as HTMLDivElement
+          
+          const view = new SliderView(rootEl, config);
+          const model = new SliderModel(config);
+          const presenter = new SliderPresenter(model, view);
+          methodsToReturn.push( $.data(this, 'sliderPlugin', new SliderPlugin(this as HTMLDivElement, view, model, presenter)) )
         }
       });
       
