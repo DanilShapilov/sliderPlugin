@@ -2,25 +2,19 @@ import { SliderView } from './SliderView'
 import { SliderModel } from "./SliderModel";
 import { debounce } from './helpers';
 
-export class SliderPresenter {
+export class SliderPresenter implements ISliderPresenter {
   private debouncedCallSubs!: Function
-  constructor(public model: ISliderModel, public view: ISliderView) {
-    this.init()
+  constructor(private model: ISliderModel, private view: ISliderView) {
+    this.debouncedCallSubs = debounce(this.model.callSubs, 300, this.model)
   }
 
-  private async init() {
-    await this.view.init()
-    await this.model.init(this.view.sliderLength)
-    this.debouncedCallSubs = await debounce(this.model.callSubs, 300, this.model)
-
-    await this.view.updateState(this.model.getState())
-
-    await this.initEvents()
-
-    await this.initTrigger()
+  destroy() {
+    $(this.view).off("view:selectChanged")
+    $(this.view).off('view:resized')
+    $(this.model).off('model:stateChanged')
   }
 
-  private initEvents() {
+  public initEvents() {
     $(this.view).on("view:selectChanged", (_e, selectedControlIndex, selectedPixel) => {
       this.model.updateStateCurrent(selectedControlIndex, selectedPixel)
       if (this.view.isSnapping) {
@@ -58,7 +52,7 @@ export class SliderPresenter {
     })
   }
 
-  private initTrigger() {
+  public initTrigger() {
     $(this.view).trigger("view:selectChanged", [
       0,
       this.model.pixelOfCurrent(0)

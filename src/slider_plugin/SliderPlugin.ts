@@ -7,31 +7,45 @@ import './skins/toxin.scss'
 import './skins/material.scss'
 import './skins/fine_tune_circle.scss'
 import './skins/fine_tune_square.scss'
+import { resizeObserver } from './helpers';
 
 
 export class SliderPlugin implements ISliderPlugin {
-   #_el: HTMLElement;
-   #_$el: JQuery;
-   #_initSettings: IPluginConfig;
-   #_view!: ISliderView
-   #_model!: ISliderModel
-   #_presenter!: ISliderPresenter
+   #_rootEl: HTMLDivElement;
+   #_view: ISliderView
+   #_model: ISliderModel
+   #_presenter: ISliderPresenter
 
-  constructor(element: HTMLElement, options: IPluginConfig, resizeObserver: ResizeObserver) {
-    this.#_el = element;
-    this.#_$el = $(element);
-    this.#_initSettings = options
-    
-    resizeObserver.observe(this.#_el)
+  constructor(rootEl: HTMLDivElement, view: ISliderView, model: ISliderModel, presenter: ISliderPresenter) {
+    this.#_rootEl = rootEl;
 
+    this.#_view = view
+    this.#_model = model
+    this.#_presenter = presenter
+
+    resizeObserver.observe(this.#_rootEl)
     this.init()
   }
 
-  private async init() {
-    this.#_view = await new SliderView(this.#_$el, this.#_initSettings);
-    this.#_model = await new SliderModel(this.#_initSettings);
-    this.#_presenter = await new SliderPresenter(this.#_model, this.#_view);
+  private async init(){
+    await this.#_view.init()
+    await this.#_model.init(this.#_view.sliderLength)
+
+    await this.#_view.updateState(this.#_model.getState())
+
+    await this.#_presenter.initEvents()
+
+    await this.#_presenter.initTrigger()
   }
+
+  destroy() {
+    resizeObserver.unobserve(this.#_rootEl)
+    this.#_view.destroy()
+    this.#_presenter.destroy()
+    // remove SliderPlugin instance
+    $(this.#_rootEl).removeData('sliderPlugin');
+  }
+
 
   resized() { $(this.#_view).trigger('view:resized') }
   
