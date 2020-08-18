@@ -10,7 +10,8 @@
         "moduleResolution": "node",
         "target": "es6",
         // "allowJs": true,
-        "types": ["node", "webpack-env", "jquery", "@types/mocha"],
+        "allowSyntheticDefaultImports": true,
+        // "types": ["node", "webpack-env", "jquery", "@types/mocha"],
         // "noEmitOnError": true
         /* Additional Checks */
         // "noUnusedLocals": true,                /* Report errors on unused locals. */
