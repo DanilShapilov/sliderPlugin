@@ -1,14 +1,14 @@
 import {boundMethod} from 'autobind-decorator'
 import { deepCopy } from './helpers';
 export class SliderView implements ISliderView{
-  private $root: JQuery;
+  private $root: HTMLDivElement;
 
   private $slider!: Slider
   private $control!: Control[]
 
   private state: IPluginConfig
 
-  constructor($root: JQuery, state:IPluginConfig) {
+  constructor($root: HTMLDivElement, state:IPluginConfig) {
     this.state = deepCopy(state)
 
     this.$root = $root
