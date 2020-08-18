@@ -7,64 +7,68 @@ import { SliderModel } from './slider_plugin/SliderModel';
 import { SliderPresenter } from './slider_plugin/SliderPresenter';
 
 export const defaultConfig: IPluginConfig = {
-    range: [0, 100],
-    generateValues: true,
-    rangeOfPixels: [],
-    step: 1,
-    current: [0],
-    snapping: false,
-    class: '',
-    selectRange: false,
-    vertical: false,
-    progressBar: true,
-    showSelected: 'always',
-  
-    showScale: false,
-    scaleStep: 1,
-    scaleHighlighting: true,
+  range: [0, 100],
+  generateValues: true,
+  rangeOfPixels: [],
+  step: 1,
+  current: [0],
+  snapping: false,
+  class: '',
+  selectRange: false,
+  vertical: false,
+  progressBar: true,
+  showSelected: 'always',
 
-    subscribers: []
+  showScale: false,
+  scaleStep: 1,
+  scaleHighlighting: true,
+
+  subscribers: []
+};
+
+(function ($) {
+  $.fn.sliderPlugin = function (options: TProvidedOptions = defaultConfig): ISliderPlugin | ISliderPlugin[] {
+    let methodsToReturn: ISliderPlugin[] = []
+    // default configuration
+    let config: IPluginConfig = $.extend({}, defaultConfig, options);
+
+    this.each(function () {
+      if (!$.data(this, 'sliderPlugin')) {
+        const rootEl = this as HTMLDivElement
+
+        const view = new SliderView(rootEl, config);
+        const model = new SliderModel(config);
+        const presenter = new SliderPresenter(model, view);
+        methodsToReturn.push(
+          $.data(this,
+            'sliderPlugin',
+            new SliderPlugin(rootEl, view, model, presenter))
+        )
+      }
+    });
+
+    if (methodsToReturn.length > 1) {
+      return methodsToReturn
+    } else if (methodsToReturn.length === 1) {
+      return methodsToReturn[0]
+    } else if (this.length === 1) {
+      return $(this).data('sliderPlugin')
+    } else if (this.length > 1) {
+      this.each(function () {
+        methodsToReturn.push($(this).data('sliderPlugin'))
+      })
+      return methodsToReturn
+    } else {
+      throw new Error("Looks like selector you provided does not exists");
+    }
   };
 
-  (function($)  {
-    $.fn.sliderPlugin = function(options:TProvidedOptions = defaultConfig): ISliderPlugin | ISliderPlugin[] {
-      let methodsToReturn: ISliderPlugin[] = [] 
-      // default configuration
-      let config: IPluginConfig = $.extend({}, defaultConfig, options);
-  
-      this.each(function() {
-        if ( !$.data(this, 'sliderPlugin') ) {
-          const rootEl = this as HTMLDivElement
-          
-          const view = new SliderView(rootEl, config);
-          const model = new SliderModel(config);
-          const presenter = new SliderPresenter(model, view);
-          methodsToReturn.push( $.data(this, 'sliderPlugin', new SliderPlugin(this as HTMLDivElement, view, model, presenter)) )
-        }
-      });
-      
-      if (methodsToReturn.length > 1) {
-        return methodsToReturn
-      }else if (methodsToReturn.length === 1) {
-        return methodsToReturn[0]
-      }else if (this.length === 1){
-        return $(this).data('sliderPlugin')
-      }else if (this.length > 1) {
-        this.each(function() {
-            methodsToReturn.push( $(this).data('sliderPlugin') )
-        })
-        return methodsToReturn
-      }else{
-        throw new Error("Looks like selector you provided does not exists");
-      }
-    };
-    
-    $(function () {
-      if ($(".sliderPlugin").length) {
-        $(".sliderPlugin").sliderPlugin();
-      }
-    })
-  })(jQuery);
+  $(function () {
+    if ($(".sliderPlugin").length) {
+      $(".sliderPlugin").sliderPlugin();
+    }
+  })
+})(jQuery);
 
 // if ( (process.env.NODE_ENV === 'development') ) {
 //   // @ts-ignore
