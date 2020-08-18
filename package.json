@@ -11,6 +11,7 @@
     "build-dev": "webpack -d --mode development",
     "build-prod": "webpack -p --mode production",
     "test": "karma start karma.conf.js --single-run",
+    "test-watch": "karma start karma.conf.js",
     "codecov": "cat coverage/lcov.info | codecov",
     "dev": "webpack-dev-server --open"
   },
