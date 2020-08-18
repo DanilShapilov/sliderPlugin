@@ -67,3 +67,10 @@ export function debounce(callback: Function, wait: number, ctx: object) {
     timeout = setTimeout(() => callback.apply(context, args), wait);
   };
 }
+
+export const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
+  entries.forEach(e => {
+    const element = e.target;
+    $(element).data('sliderPlugin').resized();
+  });
+});
