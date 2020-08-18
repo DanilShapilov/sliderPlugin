@@ -50,4 +50,5 @@ interface IPluginMethods{
 
 interface ISliderPlugin extends IPluginMethods {
   resized(): void
+  destroy(): void
 }
