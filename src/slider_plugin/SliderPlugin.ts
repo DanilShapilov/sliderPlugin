@@ -17,28 +17,22 @@ export class SliderPlugin implements ISliderPlugin {
    #_model!: ISliderModel
    #_presenter!: ISliderPresenter
 
-  constructor(element: HTMLElement, options: IPluginConfig) {
+  constructor(element: HTMLElement, options: IPluginConfig, resizeObserver: ResizeObserver) {
     this.#_el = element;
     this.#_$el = $(element);
     this.#_initSettings = options
+    
+    resizeObserver.observe(this.#_el)
 
     this.init()
   }
-
-  private static resizeObserver: ResizeObserver = new ResizeObserver(entries => {
-    entries.forEach(e => {
-      const element = e.target
-      $(element).data('sliderPlugin').resized()
-    })
-  })
 
   private async init() {
     this.#_view = await new SliderView(this.#_$el, this.#_initSettings);
     this.#_model = await new SliderModel(this.#_initSettings);
     this.#_presenter = await new SliderPresenter(this.#_model, this.#_view);
-
-    await this.observeResize()
   }
+
   resized() { $(this.#_view).trigger('view:resized') }
   
   selectedValues = () => this.#_model.selectedValues();
@@ -64,8 +58,4 @@ export class SliderPlugin implements ISliderPlugin {
 
   subscribe = (func: Function): ISliderPlugin => {this.#_model.subscribe(func); return this}
   unsubscribe = (func: Function): ISliderPlugin => {this.#_model.unsubscribe(func); return this}
-  
-  private observeResize() {
-    SliderPlugin.resizeObserver.observe(this.#_el)
-  }
 }

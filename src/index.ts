@@ -1,7 +1,4 @@
-if ( (process.env.NODE_ENV === 'development') ) {
-  //@ts-ignore
-  // import('./index.scss');
-}
+
 
 import '../declarations/index'
 import { SliderPlugin } from './slider_plugin/SliderPlugin'
@@ -26,6 +23,13 @@ export const defaultConfig: IPluginConfig = {
     subscribers: []
   };
 
+const resizeObserver: ResizeObserver = new ResizeObserver(entries => {
+  entries.forEach(e => {
+    const element = e.target;
+    $(element).data('sliderPlugin').resized();
+  });
+});
+
 
   (function($)  {
     $.fn.sliderPlugin = function(options:TProvidedOptions = defaultConfig): ISliderPlugin | ISliderPlugin[] {
@@ -35,7 +39,7 @@ export const defaultConfig: IPluginConfig = {
   
       this.each(function() {
         if ( !$.data(this, 'sliderPlugin') ) {
-          methodsToReturn.push( $.data(this, 'sliderPlugin', new SliderPlugin(this, config)) )
+          methodsToReturn.push( $.data(this, 'sliderPlugin', new SliderPlugin(this, config, resizeObserver)) )
         }
       });
       
@@ -63,6 +67,9 @@ export const defaultConfig: IPluginConfig = {
   })(jQuery);
 
 // if ( (process.env.NODE_ENV === 'development') ) {
+//   // @ts-ignore
+//   import('./index.scss');
+
 //   $(".sliderPlugin1").sliderPlugin({
 //       range: [-100, 100],
 //       current: [6, 12],
