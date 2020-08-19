@@ -21,7 +21,8 @@
   "devDependencies": {
     "@types/chai": "^4.2.12",
     "@types/jquery": "^3.5.1",
-    "@types/mocha": "^8.0.2",
+    "@types/mocha": "^8.0.3",
+    "@types/puppeteer": "^3.0.1",
     "@types/sinon": "^9.0.4",
     "@types/webpack": "^4.41.21",
     "@types/webpack-env": "^1.15.2",
