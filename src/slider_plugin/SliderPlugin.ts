@@ -1,6 +1,3 @@
-import { SliderPresenter } from './SliderPresenter'
-import { SliderView } from './SliderView'
-import { SliderModel } from './SliderModel';
 import './style.scss'
 // skins
 import './skins/toxin.scss'
