@@ -20,8 +20,7 @@ export class SliderModel implements ISliderModel {
 
   subscribe(func: Function){
     if (!isFunction(func)) {
-      console.warn('subscribe can only take functions');
-      return
+      throw new Error('subscribe method can only take functions');
     }
     this.state.subscribers.push(func)
   }
