@@ -30,7 +30,7 @@ interface IPluginMethods{
   deleteSelected(): string | string[]
   getState(): IPluginConfig
 
-  chooseValue(first: string | number, last: string | number): ISliderPlugin | void
+  chooseValue(first: string | number, last?: string | number): ISliderPlugin | void
   newRange(val: string[] | number[]): ISliderPlugin | void
   generateValues(val: boolean): ISliderPlugin | void
   changeStep(val: number): ISliderPlugin | void
