@@ -15,7 +15,7 @@ export class SliderModel implements ISliderModel {
   }
 
   getInitRange(){
-    return this.initRange
+    return deepCopy(this.initRange)
   }
 
   subscribe(func: Function){
@@ -51,6 +51,10 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.generateValues = val
+    
+    this.state.range = generateRangeArr(this.initRange, this.state.step, this.state.generateValues)
+    this.generateRangeOfPixels()
+    $(this).trigger('model:stateChanged', 'generateValues')
   }
 
   scaleHighlighting(val: boolean) {
@@ -238,7 +242,7 @@ export class SliderModel implements ISliderModel {
   }
 
   updateStateCurrent(selectedControlIndex: number, selectedPixel: number) {
-    const closest: number = this.state.rangeOfPixels.reduce((a: number, b: number, i: number) => {
+    const closest: number = this.state.rangeOfPixels.reduce((a: number, b: number) => {
       return Math.abs(b - selectedPixel) < Math.abs(a - selectedPixel) ? b : a;
     });
 
@@ -248,7 +252,8 @@ export class SliderModel implements ISliderModel {
   }
 
   getState():IPluginConfig {
-    return deepCopy(this.state)
+    const deepCopyOfState = deepCopy(this.state)
+    return {...deepCopyOfState, subscribers: [...this.state.subscribers]}
   }
 
   pixelOfCurrent(index: number) {
@@ -263,7 +268,7 @@ export class SliderModel implements ISliderModel {
     if (this.state.selectRange) {
       this.state.current[1] = this.state.current[1] ?? 0
     }
-    return this.state.current
+    return deepCopy(this.state.current)
   }
 
 
