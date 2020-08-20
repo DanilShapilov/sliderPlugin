@@ -8,13 +8,7 @@ export class SliderPresenter implements ISliderPresenter {
     this.debouncedCallSubs = debounce(this.model.callSubs, 300, this.model)
   }
 
-  destroy() {
-    $(this.view).off("view:selectChanged")
-    $(this.view).off('view:resized')
-    $(this.model).off('model:stateChanged')
-  }
-
-  public initEvents() {
+  initEvents() {
     $(this.view).on("view:selectChanged", (_e, selectedControlIndex, selectedPixel) => {
       this.model.updateStateCurrent(selectedControlIndex, selectedPixel)
       if (this.view.isSnapping) {
@@ -52,7 +46,7 @@ export class SliderPresenter implements ISliderPresenter {
     })
   }
 
-  public initTrigger() {
+  initTrigger() {
     $(this.view).trigger("view:selectChanged", [
       0,
       this.model.pixelOfCurrent(0)
@@ -65,4 +59,9 @@ export class SliderPresenter implements ISliderPresenter {
     }
   }
 
+  destroy() {
+    $(this.view).off("view:selectChanged")
+    $(this.view).off('view:resized')
+    $(this.model).off('model:stateChanged')
+  }
 }
