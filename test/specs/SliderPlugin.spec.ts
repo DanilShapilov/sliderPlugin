@@ -58,18 +58,12 @@ describe("SliderPlugin:", () => {
         expect(instance.resized).to.exist
       })
       it('should fire (view:resized) event on resize', (done) => {
-        const spyFn = sinon.spy()
         // Overwriting default event contained in Presenter
         $(view).off('view:resized')
-        $(view).on('view:resized', spyFn)
+        $(view).on('view:resized', () => done())
         // Changing container size
         rootEl.style.width = '400px';
         rootEl.style.height = '400px';
-        // Wait a bit
-        setTimeout(() => {
-          expect(spyFn.callCount).to.be.eq(1)
-          done()
-        }, 200);
       })
     })
 
