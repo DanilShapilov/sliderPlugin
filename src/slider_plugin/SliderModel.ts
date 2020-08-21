@@ -20,21 +20,22 @@ export class SliderModel implements ISliderModel {
 
   subscribe(func: Function){
     if (!isFunction(func)) {
-      throw new Error('subscribe method can only take functions');
+      console.warn('subscribe method can only take functions');
+      return;
     }
     this.state.subscribers.push(func)
   }
 
   unsubscribe(func: Function){
     if (!isFunction(func)) {
-      console.warn('unsubscribe can only take functions');
-      return
+      console.warn('unsubscribe method can only take functions');
+      return;
     }
     const isInArray = this.state.subscribers.indexOf(func)
     if (isInArray !== -1) {
       this.state.subscribers.splice(isInArray, 1);
     }else{
-      console.warn('there is no such function');
+      console.warn('there is no such function to unsubscribe');
     }
   }
 
@@ -46,7 +47,7 @@ export class SliderModel implements ISliderModel {
 
   generateValues(val: boolean) {
     if (typeof val !== 'boolean') {
-      console.warn('generateValues option should take boolean: true or false');
+      console.warn('generateValues method only takes boolean: true or false');
       return
     }
     this.state.generateValues = val
