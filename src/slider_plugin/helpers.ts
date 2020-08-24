@@ -43,7 +43,7 @@ function rangeGenerator<T extends number | string>(start: T, stop: T) {
   return shouldBeReversed ? result.reverse() : result;
 };
 
-function ckeckTypeForRange(range: number[] | string[]) {
+export function ckeckTypeForRange(range: number[] | string[]) {
   if ((typeof range[0] === 'string' || typeof range[0] === 'number')
     && (typeof range[1] === 'string' || typeof range[1] === 'number')) {
     return typeof range[0] === typeof range[1]
