@@ -1,4 +1,4 @@
-import { deepCopy, generateRangeArr, isFunction } from "./helpers";
+import { deepCopy, generateRangeArr, isFunction, ckeckTypeForRange } from "./helpers";
 
 export class SliderModel implements ISliderModel {
   private state: IPluginConfig
@@ -14,11 +14,11 @@ export class SliderModel implements ISliderModel {
     this.generateRangeOfPixels(sliderWidth)
   }
 
-  getInitRange(){
+  getInitRange() {
     return deepCopy(this.initRange)
   }
 
-  subscribe(func: Function){
+  subscribe(func: Function) {
     if (!isFunction(func)) {
       console.warn('subscribe method can only take functions');
       return;
@@ -26,7 +26,7 @@ export class SliderModel implements ISliderModel {
     this.state.subscribers.push(func)
   }
 
-  unsubscribe(func: Function){
+  unsubscribe(func: Function) {
     if (!isFunction(func)) {
       console.warn('unsubscribe method can only take functions');
       return;
@@ -34,16 +34,14 @@ export class SliderModel implements ISliderModel {
     const isInArray = this.state.subscribers.indexOf(func)
     if (isInArray !== -1) {
       this.state.subscribers.splice(isInArray, 1);
-    }else{
+    } else {
       console.warn('there is no such function to unsubscribe');
     }
   }
 
-  callSubs(){
-    this.state.subscribers.forEach( func => func())
+  callSubs() {
+    this.state.subscribers.forEach(func => func())
   }
-
-  
 
   generateValues(val: boolean) {
     if (typeof val !== 'boolean') {
@@ -51,7 +49,7 @@ export class SliderModel implements ISliderModel {
       return
     }
     this.state.generateValues = val
-    
+
     this.state.range = generateRangeArr(this.initRange, this.state.step, this.state.generateValues)
     this.generateRangeOfPixels()
     $(this).trigger('model:stateChanged', 'generateValues')
@@ -169,8 +167,12 @@ export class SliderModel implements ISliderModel {
   }
 
   newRange(val: string[] | number[]) {
-    if (!Array.isArray(val)) {
-      console.warn('newRange should be an Array');
+    if (!Array.isArray(val) || (Array.isArray(val) && val.length < 2)) {
+      console.warn('newRange should take an Array and arr.lenght >= 2');
+      return
+    }
+    if (val.length === 2 && (!ckeckTypeForRange(val)) && (this.state.generateValues === true)) {
+      console.warn('newRange method says: Hey looks like you have provided array of two values, if you want to generate range out of two values your newRange should look like this [string, string] or [number, number]');
       return
     }
     this.state.range = generateRangeArr(val, this.state.step, this.state.generateValues)
@@ -208,9 +210,9 @@ export class SliderModel implements ISliderModel {
 
     if (this.state.range.length < 2) {
       if (this.state.range.length === 0) {
-        this.state.range.push('out of values', 'out of values')
+        this.state.range.push('null', 'null')
       } else if (this.state.range.length === 1) {
-        this.state.range.push('out of values')
+        this.state.range.push('null')
       }
     }
 
@@ -221,7 +223,7 @@ export class SliderModel implements ISliderModel {
     return toDelete
   }
 
-  allValues(){
+  allValues() {
     return this.state.range as string[]
   }
 
@@ -251,9 +253,9 @@ export class SliderModel implements ISliderModel {
     this.state.current[selectedControlIndex] = closestIndex
   }
 
-  getState():IPluginConfig {
+  getState(): IPluginConfig {
     const deepCopyOfState = deepCopy(this.state)
-    return {...deepCopyOfState, subscribers: [...this.state.subscribers]}
+    return { ...deepCopyOfState, subscribers: [...this.state.subscribers] }
   }
 
   pixelOfCurrent(index: number) {
