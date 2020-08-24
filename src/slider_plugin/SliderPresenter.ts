@@ -1,5 +1,3 @@
-import { SliderView } from './SliderView'
-import { SliderModel } from "./SliderModel";
 import { debounce } from './helpers';
 
 export class SliderPresenter implements ISliderPresenter {
@@ -27,13 +25,12 @@ export class SliderPresenter implements ISliderPresenter {
       this.initTrigger()
     })
 
-    const methodsWhenViewRedrawRequired = ['vertical', 'selectRange', 'changeClass']
     $(this.model).on('model:stateChanged', async (_e, type: string) => {
       if(type === 'chooseValue'){
         this.initTrigger()
         return
       }
-      const needToRedraw = methodsWhenViewRedrawRequired.includes(type);
+      const needToRedraw = ['vertical', 'selectRange', 'changeClass'].includes(type);
       if (!needToRedraw) {
         this.view.updateState(this.model.getState())
         this.initTrigger()
