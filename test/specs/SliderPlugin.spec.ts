@@ -231,12 +231,12 @@ describe("SliderPlugin:", () => {
       })
       it('should call method from model', () => {
         const spy = sinon.spy(model, 'newRange')
-        instance.newRange([400,-100])
+        instance.newRange([400, -100])
         expect(spy.called).to.be.true
         spy.restore();
       })
       it('should return its SliderPlugin instance', () => {
-        expect(instance.newRange([400,-100])).to.be.equal(instance)
+        expect(instance.newRange([400, -100])).to.be.equal(instance)
       })
     })
 
@@ -411,12 +411,12 @@ describe("SliderPlugin:", () => {
       })
       it('should call method from model', () => {
         const spy = sinon.spy(model, 'subscribe')
-        instance.subscribe(()=>{})
+        instance.subscribe(() => { })
         expect(spy.called).to.be.true
         spy.restore();
       })
       it('should return its SliderPlugin instance', () => {
-        expect(instance.subscribe(()=>{})).to.be.equal(instance)
+        expect(instance.subscribe(() => { })).to.be.equal(instance)
       })
     })
 
@@ -426,12 +426,12 @@ describe("SliderPlugin:", () => {
       })
       it('should call method from model', () => {
         const spy = sinon.spy(model, 'unsubscribe')
-        instance.unsubscribe(()=>{})
+        instance.unsubscribe(() => { })
         expect(spy.called).to.be.true
         spy.restore();
       })
       it('should return its SliderPlugin instance', () => {
-        expect(instance.unsubscribe(()=>{})).to.be.equal(instance)
+        expect(instance.unsubscribe(() => { })).to.be.equal(instance)
       })
     })
   })
