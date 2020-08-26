@@ -54,6 +54,25 @@ describe("SliderModel:", () => {
   });
 
   describe('SliderModel Methods:', () => {
+    describe('init:', () => {
+      it('should be defined', () => {
+        expect(model.init).to.exist
+      })
+      it('should handle state.range by running generateRangeArr function', () =>{
+        const testModel = new SliderModel(defaultConfig)
+        const rangeBeforeInit = testModel.getState().range
+        testModel.init(view.sliderLength)
+        const rangeAfterInit = testModel.getState().range
+        expect(rangeBeforeInit).to.be.not.deep.equal(rangeAfterInit)
+      })
+      it('should run generateRangeOfPixels method', () => {
+        const testModel = new SliderModel(defaultConfig)
+        const spyOn__generateRangeOfPixels = sinon.spy(testModel, <any>'generateRangeOfPixels')
+        testModel.init(view.sliderLength)
+        expect(spyOn__generateRangeOfPixels.called).to.be.true
+      })
+    })
+
     describe('getInitRange:', () => {
       it('should be defined', () => {
         expect(model.getInitRange).to.exist
