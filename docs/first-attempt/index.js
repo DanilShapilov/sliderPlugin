@@ -6,7 +6,7 @@ async function createSliders() {
     step: 10,
     snapping: true,
     selectRange: true,
-    progressBar: false,
+    progressBar: true,
     class: 'sp-skin--material',
     showSelected: 'hover',
     showScale: true,
