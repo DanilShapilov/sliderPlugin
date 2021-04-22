@@ -1,3 +1,3 @@
 [DEMO PAGE](https://danilshapilov.github.io/slider-for-fsd/)
 
-# It is a piece of history :)
+# It is a piece of my history :)
