@@ -1,0 +1,22 @@
+body {
+  font-family: sans-serif;
+}
+
+.container {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 700px;
+  
+  margin: 0 auto;
+
+}
+
+.sliderPlugin1{
+  height: 200px;
+}
+.sliderPlugin2{
+  height: 200px;
+  margin-bottom: 20px;
+}
