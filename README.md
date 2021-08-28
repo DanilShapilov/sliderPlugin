@@ -1,2 +1,5 @@
 [DEMO PAGE](https://danilshapilov.github.io/sliderPlugin/first-attempt/)
-# It is a piece of my history :)
+# Plugin for jQuery written in TS
+after first attempt it was NOT refactored :)
+
+I was trying to use MVP pattern
